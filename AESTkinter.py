@@ -4,6 +4,15 @@ import tkinter.filedialog as fdialog
 from tkinter import ttk
 import tkinter.scrolledtext as Textbox
 
+from Crypto import Random
+from Crypto.Cipher import AES
+import os
+import os.path
+from os import listdir
+from os.path import isfile, join
+import time
+import hashlib
+import base64
 #Window Definition
 window = Tk()
 window.title('AES Encriptor')
@@ -18,6 +27,7 @@ class Encryptor:
         return s + b"\0" * (AES.block_size - len(s) % AES.block_size)
 
     def encrypt(self, message, key, key_size=256):
+        message = message.encode()
         message = self.pad(message)
         iv = Random.new().read(AES.block_size)
         cipher = AES.new(key, AES.MODE_CBC, iv)
@@ -70,17 +80,29 @@ def openFile():
     print(file.name)
     
 def textEncryption():
-    print("textEncription pasees")
-    print(textBox.get("1.0",END))
-    #key = label
-    #print(label)
+    text = textBox.get("1.0",END)
+    key = passwordEntry.get()
+    key = hashlib.sha256(key.encode()).digest()
+    print(key)
+    encriptor = Encryptor(key)
+    encrypted = encriptor.encrypt(text , key)
+    encryptedB64 = base64.b64encode(encrypted, altchars=None)
+    print(encryptedB64)
+    #answerlabel.config(text= encryptedB64)
+    #ent.config(text= encryptedB64)
+    tk_name.set(encryptedB64)
+    
+    #label.config(text=str(counter))
+    
+   
+    #print(encrypted.decode())
     
     
     
 #Grid definition
 counter = 0
-rowsNumber = 10
-columnsNumber = 10 
+rowsNumber = 12
+columnsNumber = 12 
 while counter < rowsNumber:
     window.rowconfigure(counter, weight=1)
     window.columnconfigure(counter, weight = 1)
@@ -102,13 +124,8 @@ nb.add(tab3 , text='Cifrar Archivo')
 tab4 = ttk.Frame(nb)
 nb.add(tab4 , text='Desifrar Archivo')
 
-#label = ttk.Label(tab1, text="que onda bandita")
-#label.grid(column = 0, row = 0)
-
-#label = ttk.Label(labelFrame , text="Holam")
 
 ################Tab1 Content ##########################
-#print('Tab content begging')
 label = ttk.Label(tab1, text="Introduzca Texto a Cifrar", width= 30)
 label.grid(column = 0, row = 0, columnspan= 4)
 
@@ -128,10 +145,24 @@ passwordEntry.grid(column = 0, row = 10)
 submitButtonTab1 = ttk.Button(tab1, text="Cifrar", command=textEncryption)
 submitButtonTab1.grid(column = 0, row = 11)
 
+#ent = Entry(tab1, state='readonly', readonlybackground='white', fg='black')
+#ent.grid(column = 0, row = 12)
+#ent.config( relief='flat')
+#ent.insert(1, "jajaja")
+
+tk_name=StringVar()
+tk_name.set("")
+entry_1 = Entry(tab1, textvariable=tk_name, width=80)
+entry_1.grid(row=12, column=0)
+#entry_1.focus_set()
 
 
-
-
+'''
+answerlabel = ttk.Label(tab1, width= 100)
+answerlabel.grid(column = 0, row = 12, columnspan= 25)
+answerlabel.configure(state="disabled")
+answerlabel.configure(bg=tab1.cget('bg'), relief=FLAT)
+'''
 
 ######################################################
 
