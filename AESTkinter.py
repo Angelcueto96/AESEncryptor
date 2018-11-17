@@ -13,6 +13,9 @@ from os.path import isfile, join
 import time
 import hashlib
 import base64
+
+
+
 #Window Definition
 window = Tk()
 window.title('AES Encriptor')
@@ -91,18 +94,28 @@ def textEncryption():
     #answerlabel.config(text= encryptedB64)
     #ent.config(text= encryptedB64)
     tk_name.set(encryptedB64)
+    #textBox.insert(encryptedB64)
     
     #label.config(text=str(counter))
-    
-   
     #print(encrypted.decode())
+    
+def textDecryption():
+    text_tab2 = textBox_tab2.get("1.0",END)
+    text_tab2 = base64.b64decode(text_tab2, altchars = None)
+    key_tab2 = passwordEntry_tab2.get()
+    key_tab2 = hashlib.sha256(key_tab2.encode()).digest()
+    encryptor = Encryptor(key_tab2)
+    decrypted = encryptor.decrypt(text_tab2, key_tab2)
+    print(decrypted)
+    decrypted_text.set(decrypted)
+    
     
     
     
 #Grid definition
 counter = 0
-rowsNumber = 12
-columnsNumber = 12 
+rowsNumber = 15
+columnsNumber = 15 
 while counter < rowsNumber:
     window.rowconfigure(counter, weight=1)
     window.columnconfigure(counter, weight = 1)
@@ -125,12 +138,14 @@ tab4 = ttk.Frame(nb)
 nb.add(tab4 , text='Desifrar Archivo')
 
 
-################Tab1 Content ##########################
+######################Tab1 Content ##########################
 label = ttk.Label(tab1, text="Introduzca Texto a Cifrar", width= 30)
 label.grid(column = 0, row = 0, columnspan= 4)
 
 
-textBox = Textbox.ScrolledText(tab1, width= 90)
+textbox_text = StringVar()
+textbox_text.set("HOla mundo")
+textBox = Textbox.ScrolledText(tab1, width= 90 )
 textBox.grid(column = 0, row = 3  )
 
 
@@ -153,7 +168,7 @@ submitButtonTab1.grid(column = 0, row = 11)
 tk_name=StringVar()
 tk_name.set("")
 entry_1 = Entry(tab1, textvariable=tk_name, width=80)
-entry_1.grid(row=12, column=0)
+entry_1.grid(row=14, column=0)
 #entry_1.focus_set()
 
 
@@ -164,7 +179,40 @@ answerlabel.configure(state="disabled")
 answerlabel.configure(bg=tab1.cget('bg'), relief=FLAT)
 '''
 
-######################################################
+###########################Tab 2 Content ########################
+
+label_tab2 = ttk.Label(tab2, text="Introduzca Texto Desifrar", width= 30)
+label_tab2.grid(column = 0, row = 0, columnspan= 4)
+
+
+textbox_text_tab2 = StringVar()
+textbox_text_tab2.set("")
+textBox_tab2 = Textbox.ScrolledText(tab2, width= 90 )
+textBox_tab2.grid(column = 0, row = 3  )
+
+
+passwordLabel_tab2 = ttk.Label(tab2, text="Contraseña")
+passwordLabel_tab2.grid(column = 0, row = 9)
+
+
+passwordEntry_tab2 = Entry(tab2,width= 30 )
+passwordEntry_tab2.grid(column = 0, row = 10)
+
+
+submitButtonTab1 = ttk.Button(tab2, text="Cifrar", command=textDecryption)
+submitButtonTab1.grid(column = 0, row = 11)
+
+#ent = Entry(tab1, state='readonly', readonlybackground='white', fg='black')
+#ent.grid(column = 0, row = 12)
+#ent.config( relief='flat')
+#ent.insert(1, "jajaja")
+
+decrypted_text=StringVar()
+decrypted_text.set("")
+entry_tab2 = Entry(tab2, textvariable=decrypted_text, width=80)
+entry_tab2.grid(row=14, column=0)
+#entry_1.focus_set()
+################################################################
 
 #Tab3 Content
 submitButton = ttk.Button(tab3, text="open file", command= openFile)
