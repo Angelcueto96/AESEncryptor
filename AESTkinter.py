@@ -10,16 +10,13 @@ import os
 import os.path
 from os import listdir
 from os.path import isfile, join
+from pathlib import Path
 import time
 import hashlib
 import base64
 
 
 
-#Window Definition
-window = Tk()
-window.title('AES Encriptor')
-window.geometry('700x700')
 
     
 class Encryptor:
@@ -30,7 +27,7 @@ class Encryptor:
         return s + b"\0" * (AES.block_size - len(s) % AES.block_size)
 
     def encrypt(self, message, key, key_size=256):
-        message = message.encode()
+        #message = message.encode()
         message = self.pad(message)
         iv = Random.new().read(AES.block_size)
         cipher = AES.new(key, AES.MODE_CBC, iv)
@@ -77,18 +74,14 @@ class Encryptor:
         for file_name in dirs:
             self.decrypt_file(file_name)
     
-def openFile():
-    file = fdialog.askopenfile()
-    #label = Label(text=file).pack()
-    print(file.name)
-    
+
 def textEncryption():
     text = textBox.get("1.0",END)
     key = passwordEntry.get()
     key = hashlib.sha256(key.encode()).digest()
     print(key)
     encriptor = Encryptor(key)
-    encrypted = encriptor.encrypt(text , key)
+    encrypted = encriptor.encrypt(text.encode() , key)
     encryptedB64 = base64.b64encode(encrypted, altchars=None)
     print(encryptedB64)
     #answerlabel.config(text= encryptedB64)
@@ -109,9 +102,33 @@ def textDecryption():
     print(decrypted)
     decrypted_text.set(decrypted)
     
+def openFile():
+    file = fdialog.askopenfile()
+    route_tab3.set(file.name)
+    #route_tab3 = str(route_tab3)
     
     
     
+    print(file.name)
+
+def encrypFile():
+    key_tab3 = passwordEntry_tab3.get()
+    key_tab3 = hashlib.sha256(key_tab3.encode()).digest()
+    encryptor = Encryptor(key_tab3)
+    encryptor.encrypt_file(str(route_tab3.get()))
+    
+#Window Definition
+window = Tk()
+window.title('AES Encriptor')
+window.geometry('750x750')
+window.configure(background='black')
+
+#Style Definition
+#backGroundStyle = ttk.Style()
+#backGroundStyle.configure("TabStyle", background="black")
+style = ttk.Style()
+style.configure("BW.TLabel", foreground="white", background="black")   
+
 #Grid definition
 counter = 0
 rowsNumber = 15
@@ -123,9 +140,10 @@ while counter < rowsNumber:
 
 #notebook
 nb = ttk.Notebook(window)
-nb.grid(row=1, column=0, columnspan = columnsNumber, rowspan=rowsNumber - 1, sticky='SWNE')
+nb.grid(row=0, column=0, columnspan = columnsNumber, rowspan=rowsNumber - 1, sticky='SWNE')
 
-tab1 = ttk.Frame(nb)
+
+tab1 = ttk.Frame(nb , style="BW.TLabel" )
 nb.add(tab1 , text='Cifrar Texto')
 
 tab2 = ttk.Frame(nb)
@@ -138,32 +156,36 @@ tab4 = ttk.Frame(nb)
 nb.add(tab4 , text='Desifrar Archivo')
 
 
+
+
 ######################Tab1 Content ##########################
-label = ttk.Label(tab1, text="Introduzca Texto a Cifrar", width= 30)
+label = ttk.Label(tab1, text="Introduzca Texto a Cifrar", width= 30, style="BW.TLabel")
 label.grid(column = 0, row = 0, columnspan= 4)
 
 
 textbox_text = StringVar()
 textbox_text.set("HOla mundo")
-textBox = Textbox.ScrolledText(tab1, width= 90 )
+
+textBox = Textbox.ScrolledText(tab1, width= 90  )
 textBox.grid(column = 0, row = 3  )
 
 
-passwordLabel = ttk.Label(tab1, text="Contraseña")
+passwordLabel = ttk.Label(tab1, text="Contraseña", style="BW.TLabel")
 passwordLabel.grid(column = 0, row = 9)
 
 
-passwordEntry = Entry(tab1,width= 30 )
+passwordEntry = Entry(tab1,width= 30  )
 passwordEntry.grid(column = 0, row = 10)
 
 
-submitButtonTab1 = ttk.Button(tab1, text="Cifrar", command=textEncryption)
+submitButtonTab1 = ttk.Button(tab1, text="Cifrar", style="BW.TLabel",command=textEncryption)
 submitButtonTab1.grid(column = 0, row = 11)
 
 #ent = Entry(tab1, state='readonly', readonlybackground='white', fg='black')
 #ent.grid(column = 0, row = 12)
 #ent.config( relief='flat')
 #ent.insert(1, "jajaja")
+
 
 tk_name=StringVar()
 tk_name.set("")
@@ -172,6 +194,9 @@ entry_1.grid(row=14, column=0)
 #entry_1.focus_set()
 
 
+temp = Text(tab1, width= 85)
+temp.grid(column = 0, row = 16)
+ 
 '''
 answerlabel = ttk.Label(tab1, width= 100)
 answerlabel.grid(column = 0, row = 12, columnspan= 25)
@@ -202,6 +227,9 @@ passwordEntry_tab2.grid(column = 0, row = 10)
 submitButtonTab1 = ttk.Button(tab2, text="Cifrar", command=textDecryption)
 submitButtonTab1.grid(column = 0, row = 11)
 
+
+
+
 #ent = Entry(tab1, state='readonly', readonlybackground='white', fg='black')
 #ent.grid(column = 0, row = 12)
 #ent.config( relief='flat')
@@ -212,13 +240,31 @@ decrypted_text.set("")
 entry_tab2 = Entry(tab2, textvariable=decrypted_text, width=80)
 entry_tab2.grid(row=14, column=0)
 #entry_1.focus_set()
-################################################################
+#############################Tab 3 Content###########################
+tittle_label_tab3 = ttk.Label(tab3, text="Seleccione un Archivo a Cifrar", width= 30)
+tittle_label_tab3.grid(column = 0, row = 0, columnspan= 4)
 
-#Tab3 Content
-submitButton = ttk.Button(tab3, text="open file", command= openFile)
-submitButton.grid(column = 0, row = rowsNumber)
+route_tab3 = StringVar()
+route_tab3.set("")
+instruction_label_tab3 = ttk.Label(tab3, text="Ingrese la ruta del archivo o selecione el Archivo")
+instruction_label_tab3.grid(column = 0, row = 1)
 
+file_label_tab3 = ttk.Entry(tab3, width = 50, textvariable= route_tab3)
+file_label_tab3.grid(column = 0, row= 2)
 
+select_file_tab3 = ttk.Button(tab3, text="Selecionar Archivo", command= openFile)
+select_file_tab3.grid(column = 0, row = 3)
+
+passwordLabel_tab3 = ttk.Label(tab3, text='Contraseña')
+passwordLabel_tab3.grid(column = 0, row= 4)
+
+passwordEntry_tab3 = ttk.Entry(tab3)
+passwordEntry_tab3.grid(column = 0, row= 5 )
+
+submitButton_tab3 = ttk.Button(tab3, text="Cifrar Archivo", command= encrypFile )
+submitButton_tab3.grid(column = 0, row = 6)
+
+#############################Tab 4 Content###########################
 
 #Option Menu
 '''
