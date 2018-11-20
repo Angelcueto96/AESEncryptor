@@ -150,7 +150,7 @@ fileTypes = [
 #Window Definition
 window = Tk()
 window.title('AES Encriptor')
-window.geometry('750x750')
+window.geometry('700x700')
 window.configure(background='black')
 
 #Style Definition
@@ -189,42 +189,45 @@ nb.add(tab4 , text='Desifrar Archivo')
 
 
 ######################Tab1 Content ##########################
-label = ttk.Label(tab1, text="Introduzca Texto a Cifrar", width= 30)
-label.grid(column = 0, row = 0, columnspan= 4)
+label = ttk.Label(tab1, text="Introduzca Texto a Cifrar")
+label.grid(column = 0, row = 0,sticky='W')
 
 
 textbox_text = StringVar()
 textbox_text.set("HOla mundo")
 
-textBox = Textbox.ScrolledText(tab1, width= 90  )
-textBox.grid(column = 0, row = 3  )
+textBox = Textbox.ScrolledText(tab1  )
+textBox.grid(column = 0, row = 3 ,sticky='N' )
 
 
 passwordLabel = ttk.Label(tab1, text="Contraseña")
-passwordLabel.grid(column = 0, row = 9)
+passwordLabel.grid(column = 0, row = 4)
 
 
-passwordEntry = Entry(tab1,width= 30, show="*"  )
-passwordEntry.grid(column = 0, row = 10)
+passwordEntry = Entry(tab1, show="*"  )
+passwordEntry.grid(column = 0, row = 5, sticky='N')
 
-show_password_labe_tab1 = ttk.Label(tab1, text = "Mostrar Contraseña")
-show_password_labe_tab1.grid(column= 0, row = 11)
-show_password_tab1 = ttk.Checkbutton(tab1)
-show_password_tab1.grid(column = 0, row = 11)
+password_frame_tab1 = ttk.Frame(tab1)
+password_frame_tab1.grid(column= 0, row =6, sticky='N')
+
+show_password_labe_tab1 = ttk.Label(password_frame_tab1, text = "Mostrar Contraseña")
+show_password_labe_tab1.grid(column= 0, row =0, sticky='W')
+show_password_tab1 = ttk.Checkbutton(password_frame_tab1)
+show_password_tab1.grid(column = 1, row = 0, sticky='E')
 
 
 submitButtonTab1 = ttk.Button(tab1, text="Cifrar",command=textEncryption)
-submitButtonTab1.grid(column = 0, row = 12)
+submitButtonTab1.grid(column = 0, row = 8)
 
 tk_name=StringVar()
 tk_name.set("")
-entry_1 = Entry(tab1, textvariable=tk_name, width=80)
-entry_1.grid(row=14, column=0)
+entry_1 = Entry(tab1, textvariable=tk_name)
+entry_1.grid(row=9, column=0)
 #entry_1.focus_set()
 
 
-temp = Text(tab1, width= 85)
-temp.grid(column = 0, row = 16)
+temp = Text(tab1)
+temp.grid(column = 0, row = 10)
  
 '''
 answerlabel = ttk.Label(tab1, width= 100)
@@ -235,13 +238,13 @@ answerlabel.configure(bg=tab1.cget('bg'), relief=FLAT)
 
 ###########################Tab 2 Content ########################
 
-label_tab2 = ttk.Label(tab2, text="Introduzca Texto Desifrar", width= 30)
-label_tab2.grid(column = 0, row = 0, columnspan= 4)
+label_tab2 = ttk.Label(tab2, text="Introduzca Texto Desifrar")
+label_tab2.grid(column = 0, row = 0)
 
 
 textbox_text_tab2 = StringVar()
 textbox_text_tab2.set("")
-textBox_tab2 = Textbox.ScrolledText(tab2, width= 90 )
+textBox_tab2 = Textbox.ScrolledText(tab2)
 textBox_tab2.grid(column = 0, row = 3  )
 
 
@@ -249,7 +252,7 @@ passwordLabel_tab2 = ttk.Label(tab2, text="Contraseña")
 passwordLabel_tab2.grid(column = 0, row = 9)
 
 
-passwordEntry_tab2 = Entry(tab2,width= 30 )
+passwordEntry_tab2 = Entry(tab2 )
 passwordEntry_tab2.grid(column = 0, row = 10)
 
 
@@ -259,19 +262,19 @@ submitButtonTab1.grid(column = 0, row = 11)
 
 decrypted_text=StringVar()
 decrypted_text.set("")
-entry_tab2 = Entry(tab2, textvariable=decrypted_text, width=80)
+entry_tab2 = Entry(tab2, textvariable=decrypted_text)
 entry_tab2.grid(row=14, column=0)
 #entry_1.focus_set()
 #############################Tab 3 Content###########################
-tittle_label_tab3 = ttk.Label(tab3, text="Seleccione un Archivo a Cifrar", width= 30)
-tittle_label_tab3.grid(column = 0, row = 0, columnspan= 4)
+tittle_label_tab3 = ttk.Label(tab3, text="Seleccione un Archivo a Cifrar")
+tittle_label_tab3.grid(column = 0, row = 0)
 
 route_tab3 = StringVar()
 route_tab3.set("")
 instruction_label_tab3 = ttk.Label(tab3, text="Ingrese la ruta del archivo o selecione el Archivo")
 instruction_label_tab3.grid(column = 0, row = 1)
 
-file_label_tab3 = ttk.Entry(tab3, width = 100, textvariable= route_tab3)
+file_label_tab3 = ttk.Entry(tab3, textvariable= route_tab3)
 file_label_tab3.grid(column = 0, row= 2)
 
 select_file_tab3 = ttk.Button(tab3, text="Selecionar Archivo", command= openFile)
@@ -307,8 +310,8 @@ submitButton_tab3.grid(column = 0, row = 11)
 
 #############################Tab 4 Content###########################
 
-tittle_label_tab4 = ttk.Label(tab4, text="Seleccione un Archivo a Desifrar", width= 30)
-tittle_label_tab4.grid(column = 0, row = 0, columnspan= 4)
+tittle_label_tab4 = ttk.Label(tab4, text="Seleccione un Archivo a Desifrar")
+tittle_label_tab4.grid(column = 0, row = 0)
 
 route_tab4 = StringVar()
 route_tab4.set("")
