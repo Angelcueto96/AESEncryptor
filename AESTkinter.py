@@ -33,13 +33,16 @@ class Encryptor:
         cipher = AES.new(key, AES.MODE_CBC, iv)
         return iv + cipher.encrypt(message)
 
-    def encrypt_file(self, file_name):
+    def encrypt_file(self, file_name, file_destination, delete):
         with open(file_name, 'rb') as fo:
             plaintext = fo.read()
         enc = self.encrypt(plaintext, self.key)
-        with open(file_name + ".enc", 'wb') as fo:
+        with open(file_destination + ".enc", 'wb') as fo:
             fo.write(enc)
-        os.remove(file_name)
+        if delete:
+            os.remove(file_name)
+            
+        
 
     def decrypt(self, ciphertext, key):
         iv = ciphertext[:AES.block_size]
@@ -47,13 +50,16 @@ class Encryptor:
         plaintext = cipher.decrypt(ciphertext[AES.block_size:])
         return plaintext.rstrip(b"\0")
 
-    def decrypt_file(self, file_name):
+    def decrypt_file(self, file_name, file_destination, delete):
         with open(file_name, 'rb') as fo:
             ciphertext = fo.read()
         dec = self.decrypt(ciphertext, self.key)
-        with open(file_name[:-4], 'wb') as fo:
+        with open(filee_destination[:-4], 'wb') as fo:
             fo.write(dec)
-        os.remove(file_name)
+        if remove:
+             os.remove(file_name)
+            
+       
 
     def getAllFiles(self):
         dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -103,20 +109,44 @@ def textDecryption():
     decrypted_text.set(decrypted)
     
 def openFile():
-    file = fdialog.askopenfile()
+    file = fdialog.askopenfile(filetypes= fileTypes)
     route_tab3.set(file.name)
-    #route_tab3 = str(route_tab3)
-    
-    
-    
+    route_tab4.set(file.name)
+    #route_tab3 = str(route_tab3)   
     print(file.name)
+    
+def saveFile():
+    file = fdialog.asksaveasfilename(filetypes= fileTypes)
+    print(file)
+    save_route_tab3.set(file)
+    #route_tab4.set(file.name)
+    
 
 def encrypFile():
     key_tab3 = passwordEntry_tab3.get()
     key_tab3 = hashlib.sha256(key_tab3.encode()).digest()
     encryptor = Encryptor(key_tab3)
-    encryptor.encrypt_file(str(route_tab3.get()))
+    destination = save_route_entry_tab3.get()
+    delete = False
+    if delete_selection_tab3.get() == 1:
+        delete = True
+
+    encryptor.encrypt_file( str(route_tab3.get()), destination, delete )
     
+def decrypFile():
+    key_tab4 = passwordEntry_tab4.get()
+    key_tab4 = hashlib.sha256(key_tab4.encode()).digest()
+    encryptor = Encryptor(key_tab4)
+    destination = save_route_entry_tab4.get()
+    delete = False
+    if delete_selection_tab4.get() == 1:
+        delete = True
+    encryptor.decrypt_file(str(route_tab4.get()),  destination, delete )
+
+fileTypes = [
+    ('Text files', '*.txt'),
+]    
+
 #Window Definition
 window = Tk()
 window.title('AES Encriptor')
@@ -143,7 +173,7 @@ nb = ttk.Notebook(window)
 nb.grid(row=0, column=0, columnspan = columnsNumber, rowspan=rowsNumber - 1, sticky='SWNE')
 
 
-tab1 = ttk.Frame(nb , style="BW.TLabel" )
+tab1 = ttk.Frame(nb  )
 nb.add(tab1 , text='Cifrar Texto')
 
 tab2 = ttk.Frame(nb)
@@ -159,7 +189,7 @@ nb.add(tab4 , text='Desifrar Archivo')
 
 
 ######################Tab1 Content ##########################
-label = ttk.Label(tab1, text="Introduzca Texto a Cifrar", width= 30, style="BW.TLabel")
+label = ttk.Label(tab1, text="Introduzca Texto a Cifrar", width= 30)
 label.grid(column = 0, row = 0, columnspan= 4)
 
 
@@ -170,22 +200,21 @@ textBox = Textbox.ScrolledText(tab1, width= 90  )
 textBox.grid(column = 0, row = 3  )
 
 
-passwordLabel = ttk.Label(tab1, text="Contraseña", style="BW.TLabel")
+passwordLabel = ttk.Label(tab1, text="Contraseña")
 passwordLabel.grid(column = 0, row = 9)
 
 
-passwordEntry = Entry(tab1,width= 30  )
+passwordEntry = Entry(tab1,width= 30, show="*"  )
 passwordEntry.grid(column = 0, row = 10)
 
+show_password_labe_tab1 = ttk.Label(tab1, text = "Mostrar Contraseña")
+show_password_labe_tab1.grid(column= 0, row = 11)
+show_password_tab1 = ttk.Checkbutton(tab1)
+show_password_tab1.grid(column = 0, row = 11)
 
-submitButtonTab1 = ttk.Button(tab1, text="Cifrar", style="BW.TLabel",command=textEncryption)
-submitButtonTab1.grid(column = 0, row = 11)
 
-#ent = Entry(tab1, state='readonly', readonlybackground='white', fg='black')
-#ent.grid(column = 0, row = 12)
-#ent.config( relief='flat')
-#ent.insert(1, "jajaja")
-
+submitButtonTab1 = ttk.Button(tab1, text="Cifrar",command=textEncryption)
+submitButtonTab1.grid(column = 0, row = 12)
 
 tk_name=StringVar()
 tk_name.set("")
@@ -228,13 +257,6 @@ submitButtonTab1 = ttk.Button(tab2, text="Cifrar", command=textDecryption)
 submitButtonTab1.grid(column = 0, row = 11)
 
 
-
-
-#ent = Entry(tab1, state='readonly', readonlybackground='white', fg='black')
-#ent.grid(column = 0, row = 12)
-#ent.config( relief='flat')
-#ent.insert(1, "jajaja")
-
 decrypted_text=StringVar()
 decrypted_text.set("")
 entry_tab2 = Entry(tab2, textvariable=decrypted_text, width=80)
@@ -249,7 +271,7 @@ route_tab3.set("")
 instruction_label_tab3 = ttk.Label(tab3, text="Ingrese la ruta del archivo o selecione el Archivo")
 instruction_label_tab3.grid(column = 0, row = 1)
 
-file_label_tab3 = ttk.Entry(tab3, width = 50, textvariable= route_tab3)
+file_label_tab3 = ttk.Entry(tab3, width = 100, textvariable= route_tab3)
 file_label_tab3.grid(column = 0, row= 2)
 
 select_file_tab3 = ttk.Button(tab3, text="Selecionar Archivo", command= openFile)
@@ -261,10 +283,74 @@ passwordLabel_tab3.grid(column = 0, row= 4)
 passwordEntry_tab3 = ttk.Entry(tab3)
 passwordEntry_tab3.grid(column = 0, row= 5 )
 
+save_file_label_tab3 = ttk.Label(tab3, text="Selecione en donde quiere guardar el archivo")
+save_file_label_tab3.grid(column = 0 , row = 6)
+
+save_route_tab3 = StringVar()
+save_route_tab3.set("")
+save_route_entry_tab3 = ttk.Entry(tab3, textvariable= save_route_tab3)
+save_route_entry_tab3.grid(column = 0, row = 7)
+save_route_button_tab3 = ttk.Button(tab3, text="Guardar Como",command= saveFile )
+save_route_button_tab3.grid(column = 0, row = 8)
+
+delete_file_label_tab3 = ttk.Label(tab3, text='Desea Borrar el Archivo Original')
+delete_file_label_tab3.grid(column = 0, row= 9)
+
+delete_selection_tab3 = IntVar()
+delete_file_input_tab3 = ttk.Checkbutton(tab3, variable = delete_selection_tab3)
+delete_file_input_tab3.grid(column = 0, row= 10)
+#delete_file_input_tab3.state(['disabled'])
+
 submitButton_tab3 = ttk.Button(tab3, text="Cifrar Archivo", command= encrypFile )
-submitButton_tab3.grid(column = 0, row = 6)
+submitButton_tab3.grid(column = 0, row = 11)
+
 
 #############################Tab 4 Content###########################
+
+tittle_label_tab4 = ttk.Label(tab4, text="Seleccione un Archivo a Desifrar", width= 30)
+tittle_label_tab4.grid(column = 0, row = 0, columnspan= 4)
+
+route_tab4 = StringVar()
+route_tab4.set("")
+instruction_label_tab4 = ttk.Label(tab4, text="Ingrese la ruta del archivo o selecione el Archivo")
+instruction_label_tab4.grid(column = 0, row = 1)
+
+file_label_tab4 = ttk.Entry(tab4, width = 50, textvariable= route_tab4)
+file_label_tab4.grid(column = 0, row= 2)
+
+select_file_tab4 = ttk.Button(tab4, text="Selecionar Archivo", command= openFile)
+select_file_tab4.grid(column = 0, row = 3)
+
+passwordLabel_tab4 = ttk.Label(tab4, text='Contraseña')
+passwordLabel_tab4.grid(column = 0, row= 4)
+
+passwordEntry_tab4 = ttk.Entry(tab4)
+passwordEntry_tab4.grid(column = 0, row= 5 )
+
+save_file_label_tab4 = ttk.Label(tab4, text="Selecione en donde quiere guardar el archivo")
+save_file_label_tab4.grid(column = 0 , row = 6)
+
+save_route_tab4 = StringVar()
+save_route_tab4.set("")
+save_route_entry_tab4 = ttk.Entry(tab4, textvariable= save_route_tab3)
+save_route_entry_tab4.grid(column = 0, row = 7)
+save_route_button_tab4 = ttk.Button(tab4, text="Guardar Como",command= saveFile )
+save_route_button_tab4.grid(column = 0, row = 8)
+
+delete_file_label_tab4 = ttk.Label(tab4, text='Desea Borrar el Archivo Original')
+delete_file_label_tab4.grid(column = 0, row= 9)
+
+delete_selecion_tab4 = IntVar()
+delete_file_input_tab4 = ttk.Checkbutton(tab4, variable= delete_selecion_tab4)
+delete_file_input_tab4.grid(column = 0, row= 10)
+#delete_file_input_tab4.state(['alternate'])
+
+
+submitButton_tab4 = ttk.Button(tab4, text="Cifrar Archivo", command= decrypFile )
+submitButton_tab4.grid(column = 0, row = 11)
+
+
+######################################################################
 
 #Option Menu
 '''
