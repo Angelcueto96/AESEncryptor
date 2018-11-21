@@ -294,20 +294,22 @@ submitButtonTab1.grid(column = 0, row = 11)
 tittle_label_tab3 = ttk.Label(tab3, text="Seleccione un Archivo a Cifrar")
 tittle_label_tab3.grid(column = 0, row = 0, sticky='N')
 
-route_tab3 = StringVar()
-route_tab3.set("")
+
 instruction_label_tab3 = ttk.Label(tab3, text="Ingrese la ruta del archivo o selecione el Archivo")
 instruction_label_tab3.grid(column = 0, row = 1)
 
-file_label_tab3 = ttk.Entry(tab3, textvariable= route_tab3, width=73)
-file_label_tab3.grid(column = 0, row= 2,sticky='N')
-
-select_file_tab3 = ttk.Button(tab3, text="Selecionar Archivo", command= openFile)
-select_file_tab3.grid(column = 0, row = 3)
-
+#Open fram
+file_frame_tab3 = ttk.Frame(tab3)
+file_frame_tab3.grid(column = 0, row = 2)
+route_tab3 = StringVar()
+route_tab3.set("")
+file_label_tab3 = ttk.Entry(file_frame_tab3, textvariable= route_tab3, width=50)
+file_label_tab3.grid(column = 0, row= 0,sticky='W')
+select_file_tab3 = ttk.Button(file_frame_tab3, text="Selecionar Archivo", command= openFile)
+select_file_tab3.grid(column = 1, row = 0, sticky='E')
+#password Frame
 password_frame_tab3 = ttk.Frame(tab3)
 password_frame_tab3.grid(column= 0, row =6, sticky='N')
-
 passwordLabel_tab3 = ttk.Label(password_frame_tab3, text="Contraseña")
 passwordLabel_tab3.grid(column = 0, row = 0)
 password_entry_variable_3= IntVar()
@@ -318,20 +320,20 @@ show_password_tab3.grid(column = 2, row = 0, sticky='E')
 show_password_labe_tab3 = ttk.Label(password_frame_tab3, text = "Mostrar")
 show_password_labe_tab3.grid(column= 3, row =0, sticky='W')
 
-
-
-
-
 save_file_label_tab3 = ttk.Label(tab3, text="Selecione en donde quiere guardar el archivo")
-save_file_label_tab3.grid(column = 0 , row = 7 )
+save_file_label_tab3.grid(column = 0 , row = 3 )
 
+#save File Frame
+save_file_frame = ttk.Frame(tab3)
+save_file_frame.grid(column = 0, row = 4)
 save_route_tab3 = StringVar()
 save_route_tab3.set("")
-save_route_entry_tab3 = ttk.Entry(tab3, textvariable= save_route_tab3,  width=73)
-save_route_entry_tab3.grid(column = 0, row = 8)
-save_route_button_tab3 = ttk.Button(tab3, text="Guardar Como",command= saveFile )
-save_route_button_tab3.grid(column = 0, row = 9)
+save_route_entry_tab3 = ttk.Entry(save_file_frame, textvariable= save_route_tab3,  width=50)
+save_route_entry_tab3.grid(column = 0, row = 0)
+save_route_button_tab3 = ttk.Button(save_file_frame, text="Guardar Como",command= saveFile )
+save_route_button_tab3.grid(column = 1, row = 0)
 
+#Delete File Frame
 delete_file_frame_tab3 = ttk.Entry(tab3)
 delete_file_frame_tab3.grid(column = 0, row = 10)
 
