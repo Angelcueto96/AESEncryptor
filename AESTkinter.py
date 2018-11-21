@@ -81,19 +81,21 @@ class Encryptor:
             self.decrypt_file(file_name)
     
 
+
 def textEncryption():
     text = textBox.get("1.0",END)
     key = passwordEntry.get()
-    key = hashlib.sha256(key.encode()).digest()
-    print(key)
-    encriptor = Encryptor(key)
-    encrypted = encriptor.encrypt(text.encode() , key)
-    encryptedB64 = base64.b64encode(encrypted, altchars=None)
-    print(encryptedB64)
-    #answerlabel.config(text= encryptedB64)
-    #ent.config(text= encryptedB64)
-    textBox.delete("1.0", END)
-    textBox.insert("1.0", encryptedB64)
+    if text != '' and checkPassword(key):
+        key = hashlib.sha256(key.encode()).digest()
+        print(key)
+        encriptor = Encryptor(key)
+        encrypted = encriptor.encrypt(text.encode() , key)
+        encryptedB64 = base64.b64encode(encrypted, altchars=None)
+        print(encryptedB64)
+        textBox.delete("1.0", END)
+        textBox.insert("1.0", encryptedB64)
+        
+        
     
     
 def textDecryption():
@@ -144,8 +146,24 @@ def decrypFile():
         delete = True
     encryptor.decrypt_file(str(route_tab4.get()),  destination, delete )
 
-def showCharacters(tab):
-    
+digits = '123456789'
+capital = 'QWERTYUIOPASDFGHJKLÑZXCVBNM'
+
+def checkPassword(password):
+    valid = False
+    if len(password) >= 8:
+        containsDigit = False
+        containsCapital = False
+        for letter in list(password):
+            if letter in digits:
+                containsDigit = True
+            if letter in capital:
+                containsCapital = True
+        if containsDigit and containsCapital:
+            valid = True
+    return valid
+
+def showCharacters(tab):   
     if tab == 1:
         if password_entry_variable.get() == 1:
             passwordEntry.config(show="")
@@ -161,15 +179,6 @@ def showCharacters(tab):
             passwordEntry_tab3.config(show="")
         elif password_entry_variable_3.get() == 0:
             passwordEntry_tab3.config(show="*")
-    
-        
-    
-        
-
-        
-        
-    
-    
     
 fileTypes = [
     ('Text files', '*.txt'),
