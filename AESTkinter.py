@@ -94,6 +94,8 @@ def textEncryption():
         print(encryptedB64)
         textBox.delete("1.0", END)
         textBox.insert("1.0", encryptedB64)
+    else:
+        error_label_tab1.config( text = "Verifique  cumplir con lo siguiente: \n Que los campos sean correctos \n Que la contraseña tenga al menos 8 caracteres una letra mayuscla y al menos un digito")
         
         
     
@@ -252,16 +254,21 @@ show_password_labe_tab1.grid(column= 3, row =0, sticky='W')
 submitButtonTab1 = ttk.Button(tab1, text="Cifrar",command=textEncryption)
 submitButtonTab1.grid(column = 0, row = 8)
 
+
+error_label_tab1 = ttk.Label(tab1)
+error_label_tab1.grid(column = 0, row = 9)
+
+
 ###########################Tab 2 Content ########################
 
 label_tab2 = ttk.Label(tab2, text="Introduzca Texto Desifrar")
-label_tab2.grid(column = 0, row = 0)
+label_tab2.grid(column = 0, row = 0 , pady=20)
 
 #text box
 textbox_text_tab2 = StringVar()
 textbox_text_tab2.set("")
 textBox_tab2 = Textbox.ScrolledText(tab2)
-textBox_tab2.grid(column = 0, row = 3  )
+textBox_tab2.grid(column = 0, row = 3 )
 
 #password Frame
 password_frame_tab2 = ttk.Frame(tab2)
@@ -280,11 +287,14 @@ show_password_labe_tab2.grid(column= 3, row =0, sticky='W')
 submitButtonTab1 = ttk.Button(tab2, text="Cifrar", command=textDecryption)
 submitButtonTab1.grid(column = 0, row = 11)
 
+error_label_tab2 = ttk.Label(tab2)
+error_label_tab2.grid(column = 0, row = 9)
+
 #############################Tab 3 Content###########################
 
 #tit
 tittle_label_tab3 = ttk.Label(tab3, text="Seleccione un Archivo a Cifrar")
-tittle_label_tab3.grid(column = 0, row = 0, sticky='N', pady=20)
+tittle_label_tab3.grid(column = 0, row = 0, pady=20)
 
 
 instruction_label_tab3 = ttk.Label(tab3, text="Ingrese la ruta del archivo o selecione el Archivo")
@@ -346,7 +356,7 @@ submitButton_tab3.grid(column = 0, row = 11, pady=20)
 #############################Tab 4 Content###########################
 
 tittle_label_tab4 = ttk.Label(tab4, text="Seleccione un Archivo a Desifrar")
-tittle_label_tab4.grid(column = 0, row = 0)
+tittle_label_tab4.grid(column = 0, row = 0, pady=20)
 
 instruction_label_tab4 = ttk.Label(tab4, text="Ingrese la ruta del archivo o selecione el Archivo")
 instruction_label_tab4.grid(column = 0, row = 1)
