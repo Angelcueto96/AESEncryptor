@@ -92,11 +92,9 @@ def textEncryption():
     print(encryptedB64)
     #answerlabel.config(text= encryptedB64)
     #ent.config(text= encryptedB64)
-    tk_name.set(encryptedB64)
-    #textBox.insert(encryptedB64)
+    textBox.delete("1.0", END)
+    textBox.insert("1.0", encryptedB64)
     
-    #label.config(text=str(counter))
-    #print(encrypted.decode())
     
 def textDecryption():
     text_tab2 = textBox_tab2.get("1.0",END)
@@ -106,7 +104,8 @@ def textDecryption():
     encryptor = Encryptor(key_tab2)
     decrypted = encryptor.decrypt(text_tab2, key_tab2)
     print(decrypted)
-    decrypted_text.set(decrypted)
+    textBox_tab2.delete("1.0", END)
+    textBox_tab2.insert("1.0", decrypted)
     
 def openFile():
     file = fdialog.askopenfile(filetypes= fileTypes)
@@ -143,6 +142,13 @@ def decrypFile():
         delete = True
     encryptor.decrypt_file(str(route_tab4.get()),  destination, delete )
 
+def showCharacters():
+    passwordEntry.config(show="")
+        
+        
+    
+    
+    
 fileTypes = [
     ('Text files', '*.txt'),
 ]    
@@ -200,34 +206,25 @@ textBox = Textbox.ScrolledText(tab1  )
 textBox.grid(column = 0, row = 3 ,sticky='N' )
 
 
-passwordLabel = ttk.Label(tab1, text="Contraseña")
-passwordLabel.grid(column = 0, row = 4)
-
-
-passwordEntry = Entry(tab1, show="*"  )
-passwordEntry.grid(column = 0, row = 5, sticky='N')
-
 password_frame_tab1 = ttk.Frame(tab1)
 password_frame_tab1.grid(column= 0, row =6, sticky='N')
 
-show_password_labe_tab1 = ttk.Label(password_frame_tab1, text = "Mostrar Contraseña")
-show_password_labe_tab1.grid(column= 0, row =0, sticky='W')
-show_password_tab1 = ttk.Checkbutton(password_frame_tab1)
-show_password_tab1.grid(column = 1, row = 0, sticky='E')
+passwordLabel = ttk.Label(password_frame_tab1, text="Contraseña")
+passwordLabel.grid(column = 0, row = 0)
+
+password_entry_variable= IntVar()
+passwordEntry = Entry(password_frame_tab1, show="*" )
+passwordEntry.grid(column = 1, row = 0, pady=20, sticky='N')
+
+show_password_tab1 = ttk.Checkbutton(password_frame_tab1, command = showCharacters , variable= password_entry_variable)
+show_password_tab1.grid(column = 2, row = 0, sticky='E')
+show_password_labe_tab1 = ttk.Label(password_frame_tab1, text = "Mostrar")
+show_password_labe_tab1.grid(column= 3, row =0, sticky='W')
 
 
 submitButtonTab1 = ttk.Button(tab1, text="Cifrar",command=textEncryption)
 submitButtonTab1.grid(column = 0, row = 8)
 
-tk_name=StringVar()
-tk_name.set("")
-entry_1 = Entry(tab1, textvariable=tk_name)
-entry_1.grid(row=9, column=0)
-#entry_1.focus_set()
-
-
-temp = Text(tab1)
-temp.grid(column = 0, row = 10)
  
 '''
 answerlabel = ttk.Label(tab1, width= 100)
@@ -260,10 +257,6 @@ submitButtonTab1 = ttk.Button(tab2, text="Cifrar", command=textDecryption)
 submitButtonTab1.grid(column = 0, row = 11)
 
 
-decrypted_text=StringVar()
-decrypted_text.set("")
-entry_tab2 = Entry(tab2, textvariable=decrypted_text)
-entry_tab2.grid(row=14, column=0)
 #entry_1.focus_set()
 #############################Tab 3 Content###########################
 
