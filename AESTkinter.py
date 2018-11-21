@@ -94,6 +94,7 @@ def textEncryption():
         print(encryptedB64)
         textBox.delete("1.0", END)
         textBox.insert("1.0", encryptedB64)
+        error_label_tab2.config(text = "")
     else:
         error_label_tab1.config( text = "Verifique  cumplir con lo siguiente: \n Que los campos sean correctos \n Que la contraseña tenga al menos 8 caracteres una letra mayuscla y al menos un digito")
         
@@ -102,14 +103,27 @@ def textEncryption():
     
 def textDecryption():
     text_tab2 = textBox_tab2.get("1.0",END)
-    text_tab2 = base64.b64decode(text_tab2, altchars = None)
     key_tab2 = passwordEntry_tab2.get()
-    key_tab2 = hashlib.sha256(key_tab2.encode()).digest()
-    encryptor = Encryptor(key_tab2)
-    decrypted = encryptor.decrypt(text_tab2, key_tab2)
-    print(decrypted)
-    textBox_tab2.delete("1.0", END)
-    textBox_tab2.insert("1.0", decrypted)
+    if text_tab2 != '' and checkPassword(key_tab2):
+        try:
+            text_tab2 = base64.b64decode(text_tab2, altchars = None)
+        except ValueError:
+            error_label_tab2.config(text = "Mensaje no Valido")
+            
+        key_tab2 = hashlib.sha256(key_tab2.encode()).digest()
+        encryptor = Encryptor(key_tab2)
+        decryoted = ''
+        try:
+            decrypted = encryptor.decrypt(text_tab2, key_tab2)
+            print(decrypted)
+            textBox_tab2.delete("1.0", END)
+            textBox_tab2.insert("1.0", decrypted)
+            error_label_tab2.config(text = "")
+        except ValueError:
+            error_label_tab2.config(text = "Mensaje no Valido")
+    else:
+        error_label_tab2.config( text = "Verifique  cumplir con lo siguiente: \n Que los campos sean correctos \n Que la contraseña tenga al menos 8 caracteres una letra mayuscla y al menos un digito")
+        
     
 def openFile(tab):
     file = fdialog.askopenfile(filetypes= fileTypes)
@@ -211,7 +225,6 @@ while counter < rowsNumber:
 nb = ttk.Notebook(window)
 nb.grid(row=0, column=0, columnspan = columnsNumber, rowspan=rowsNumber - 1, sticky='SWNE')
 
-
 tab1 = ttk.Frame(nb  )
 nb.add(tab1 , text='Cifrar Texto')
 
@@ -223,8 +236,6 @@ nb.add(tab3 , text='Cifrar Archivo')
 
 tab4 = ttk.Frame(nb)
 nb.add(tab4 , text='Desifrar Archivo')
-
-
 
 
 ######################Tab1 Content ##########################
