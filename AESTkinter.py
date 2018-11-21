@@ -142,8 +142,28 @@ def decrypFile():
         delete = True
     encryptor.decrypt_file(str(route_tab4.get()),  destination, delete )
 
-def showCharacters():
-    passwordEntry.config(show="")
+def showCharacters(tab):
+    
+    if tab == 1:
+        if password_entry_variable.get() == 1:
+            passwordEntry.config(show="")
+        elif password_entry_variable.get() == 0:
+            passwordEntry.config(show="*")
+    elif tab == 2:
+        if password_entry_variable_2.get() == 1:
+            passwordEntry_tab2.config(show="")
+        elif password_entry_variable_2.get() == 0:
+            passwordEntry_tab2.config(show="*")
+    elif tab == 3:
+        if password_entry_variable_3.get() == 1:
+            passwordEntry_tab3.config(show="")
+        elif password_entry_variable_3.get() == 0:
+            passwordEntry_tab3.config(show="*")
+    
+        
+    
+        
+
         
         
     
@@ -216,7 +236,7 @@ password_entry_variable= IntVar()
 passwordEntry = Entry(password_frame_tab1, show="*" )
 passwordEntry.grid(column = 1, row = 0, pady=20, sticky='N')
 
-show_password_tab1 = ttk.Checkbutton(password_frame_tab1, command = showCharacters , variable= password_entry_variable)
+show_password_tab1 = ttk.Checkbutton(password_frame_tab1, command = lambda:showCharacters(1) , variable= password_entry_variable)
 show_password_tab1.grid(column = 2, row = 0, sticky='E')
 show_password_labe_tab1 = ttk.Label(password_frame_tab1, text = "Mostrar")
 show_password_labe_tab1.grid(column= 3, row =0, sticky='W')
@@ -245,12 +265,23 @@ textBox_tab2 = Textbox.ScrolledText(tab2)
 textBox_tab2.grid(column = 0, row = 3  )
 
 
-passwordLabel_tab2 = ttk.Label(tab2, text="Contraseña")
-passwordLabel_tab2.grid(column = 0, row = 9)
 
 
-passwordEntry_tab2 = Entry(tab2 )
-passwordEntry_tab2.grid(column = 0, row = 10)
+password_frame_tab2 = ttk.Frame(tab2)
+password_frame_tab2.grid(column= 0, row =4, sticky='N')
+
+passwordLabel_tab2 = ttk.Label(password_frame_tab2, text="Contraseña")
+passwordLabel_tab2.grid(column = 0, row = 0)
+
+password_entry_variable_2= IntVar()
+passwordEntry_tab2 = Entry(password_frame_tab2, show="*" )
+passwordEntry_tab2.grid(column = 1, row = 0, pady=20, sticky='N')
+
+show_password_tab2 = ttk.Checkbutton(password_frame_tab2, command = lambda:showCharacters(2) , variable= password_entry_variable_2)
+show_password_tab2.grid(column = 2, row = 0, sticky='E')
+show_password_labe_tab2 = ttk.Label(password_frame_tab2, text = "Mostrar")
+show_password_labe_tab2.grid(column= 3, row =0, sticky='W')
+
 
 
 submitButtonTab1 = ttk.Button(tab2, text="Cifrar", command=textDecryption)
@@ -274,20 +305,21 @@ file_label_tab3.grid(column = 0, row= 2,sticky='N')
 select_file_tab3 = ttk.Button(tab3, text="Selecionar Archivo", command= openFile)
 select_file_tab3.grid(column = 0, row = 3)
 
-
-passwordLabel_tab3 = ttk.Label(tab3, text='Contraseña')
-passwordLabel_tab3.grid(column = 0, row= 4)
-
-passwordEntry_tab3 = ttk.Entry(tab3)
-passwordEntry_tab3.grid(column = 0, row= 5 )
-
 password_frame_tab3 = ttk.Frame(tab3)
 password_frame_tab3.grid(column= 0, row =6, sticky='N')
 
-show_password_labe_tab3 = ttk.Label(password_frame_tab3, text = "Mostrar Contraseña")
-show_password_labe_tab3.grid(column= 0, row =0, sticky='W')
-show_password_tab1 = ttk.Checkbutton(password_frame_tab3)
-show_password_tab1.grid(column = 1, row = 0, sticky='E')
+passwordLabel_tab3 = ttk.Label(password_frame_tab3, text="Contraseña")
+passwordLabel_tab3.grid(column = 0, row = 0)
+password_entry_variable_3= IntVar()
+passwordEntry_tab3 = Entry(password_frame_tab3, show="*" )
+passwordEntry_tab3.grid(column = 1, row = 0, pady=20, sticky='N')
+show_password_tab3 = ttk.Checkbutton(password_frame_tab3, command = lambda:showCharacters(3) , variable= password_entry_variable_3)
+show_password_tab3.grid(column = 2, row = 0, sticky='E')
+show_password_labe_tab3 = ttk.Label(password_frame_tab3, text = "Mostrar")
+show_password_labe_tab3.grid(column= 3, row =0, sticky='W')
+
+
+
 
 
 save_file_label_tab3 = ttk.Label(tab3, text="Selecione en donde quiere guardar el archivo")
