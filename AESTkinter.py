@@ -165,12 +165,21 @@ def encrypFile():
 def decrypFile():
     key_tab4 = passwordEntry_tab4.get()
     key_tab4 = hashlib.sha256(key_tab4.encode()).digest()
-    encryptor = Encryptor(key_tab4)
+    route = str(route_tab4.get())
     destination = save_route_entry_tab4.get()
-    delete = False
-    if delete_selection_tab4.get() == 1:
-        delete = True
-    encryptor.decrypt_file(str(route_tab4.get()),  destination, delete )
+    if route != '' and destination != '' and checkPassword(key_tab4):
+        encryptor = Encryptor(key_tab4)
+        delete = False
+        if delete_selection_tab4.get() == 1:
+            delete = True
+        try:
+            encryptor.decrypt_file(route,  destination, delete )
+        except ValueError:
+            error_label_tab4.config(text = "Verifique que las rutas sean correctas")
+    else:
+        error_label_tab4.config(text = "Verifique lo siguiente:")
+        
+            
 
 digits = '123456789'
 capital = 'QWERTYUIOPASDFGHJKLÑZXCVBNM'
@@ -220,7 +229,7 @@ window.configure(background='black')
 #backGroundStyle = ttk.Style()
 #backGroundStyle.configure("TabStyle", background="black")
 style = ttk.Style()
-style.configure("BW.TLabel", foreground="white", background="black")   
+style.configure("Dark", foreground="white", background="black")   
 
 #Grid definition
 counter = 0
@@ -234,7 +243,7 @@ while counter < rowsNumber:
 #notebook
 nb = ttk.Notebook(window)
 nb.grid(row=0, column=0, columnspan = columnsNumber, rowspan=rowsNumber - 1, sticky='SWNE')
-tab1 = ttk.Frame(nb  )
+tab1 = ttk.Frame(nb)
 nb.add(tab1 , text='Cifrar Texto')
 tab2 = ttk.Frame(nb)
 nb.add(tab2 , text='Desifrar Texto')
@@ -419,7 +428,10 @@ delete_file_input_tab4.grid(column = 1, row= 0)
 
 #Submit
 submitButton_tab4 = ttk.Button(tab4, text="Cifrar Archivo", command= decrypFile )
-submitButton_tab4.grid(column = 0, row = 12)
+submitButton_tab4.grid(column = 0, row = 11)
+
+error_label_tab4 = ttk.Label(tab4)
+error_label_tab4.grid(column = 0, row = 12)
 
 ######################################################################
 
