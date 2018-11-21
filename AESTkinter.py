@@ -112,7 +112,7 @@ def textDecryption():
             
         key_tab2 = hashlib.sha256(key_tab2.encode()).digest()
         encryptor = Encryptor(key_tab2)
-        decryoted = ''
+        #decryoted = ''
         try:
             decrypted = encryptor.decrypt(text_tab2, key_tab2)
             print(decrypted)
@@ -144,13 +144,23 @@ def saveFile():
 def encrypFile():
     key_tab3 = passwordEntry_tab3.get()
     key_tab3 = hashlib.sha256(key_tab3.encode()).digest()
-    encryptor = Encryptor(key_tab3)
+    route = str(route_tab3.get())
     destination = save_route_entry_tab3.get()
-    delete = False
-    if delete_selection_tab3.get() == 1:
-        delete = True
-
-    encryptor.encrypt_file( str(route_tab3.get()), destination, delete )
+    
+    if route != '' and destination != '' and checkPassword(key_tab3):
+        encryptor = Encryptor(key_tab3)
+        delete = False
+        if delete_selection_tab3.get() == 1:
+            delete = True
+        try:
+            encryptor.encrypt_file( route, destination, delete )
+        except ValueError:
+            error_label_tab3.config(text = "Verifique que las rutas sean correctas")
+    else:
+        error_label_tab3.config(text = "Verifique lo siguiente:")
+            
+                
+    
     
 def decrypFile():
     key_tab4 = passwordEntry_tab4.get()
@@ -224,19 +234,14 @@ while counter < rowsNumber:
 #notebook
 nb = ttk.Notebook(window)
 nb.grid(row=0, column=0, columnspan = columnsNumber, rowspan=rowsNumber - 1, sticky='SWNE')
-
 tab1 = ttk.Frame(nb  )
 nb.add(tab1 , text='Cifrar Texto')
-
 tab2 = ttk.Frame(nb)
 nb.add(tab2 , text='Desifrar Texto')
-
 tab3 = ttk.Frame(nb)
 nb.add(tab3 , text='Cifrar Archivo')
-
 tab4 = ttk.Frame(nb)
 nb.add(tab4 , text='Desifrar Archivo')
-
 
 ######################Tab1 Content ##########################
 label = ttk.Label(tab1, text="Introduzca Texto a Cifrar")
@@ -271,16 +276,13 @@ error_label_tab1.grid(column = 0, row = 9)
 
 
 ###########################Tab 2 Content ########################
-
 label_tab2 = ttk.Label(tab2, text="Introduzca Texto Desifrar")
 label_tab2.grid(column = 0, row = 0 , pady=20)
-
 #text box
 textbox_text_tab2 = StringVar()
 textbox_text_tab2.set("")
 textBox_tab2 = Textbox.ScrolledText(tab2)
 textBox_tab2.grid(column = 0, row = 3 )
-
 #password Frame
 password_frame_tab2 = ttk.Frame(tab2)
 password_frame_tab2.grid(column= 0, row =4, sticky='N')
@@ -293,7 +295,6 @@ show_password_tab2 = ttk.Checkbutton(password_frame_tab2, command = lambda:showC
 show_password_tab2.grid(column = 2, row = 0, sticky='E')
 show_password_labe_tab2 = ttk.Label(password_frame_tab2, text = "Mostrar")
 show_password_labe_tab2.grid(column= 3, row =0, sticky='W')
-
 #submit button
 submitButtonTab1 = ttk.Button(tab2, text="Cifrar", command=textDecryption)
 submitButtonTab1.grid(column = 0, row = 11)
@@ -306,7 +307,6 @@ error_label_tab2.grid(column = 0, row = 9)
 #tit
 tittle_label_tab3 = ttk.Label(tab3, text="Seleccione un Archivo a Cifrar")
 tittle_label_tab3.grid(column = 0, row = 0, pady=20)
-
 
 instruction_label_tab3 = ttk.Label(tab3, text="Ingrese la ruta del archivo o selecione el Archivo")
 instruction_label_tab3.grid(column = 0, row = 1)
@@ -358,11 +358,11 @@ delete_file_input_tab3 = ttk.Checkbutton(delete_file_frame_tab3, variable = dele
 delete_file_input_tab3.grid(column = 1, row= 0)
 #delete_file_input_tab3.state(['disabled'])
 
-
-
 submitButton_tab3 = ttk.Button(tab3, text="Cifrar Archivo", command= encrypFile )
 submitButton_tab3.grid(column = 0, row = 11, pady=20)
 
+error_label_tab3 = ttk.Label(tab3)
+error_label_tab3.grid(column = 0, row = 12)
 
 #############################Tab 4 Content###########################
 
