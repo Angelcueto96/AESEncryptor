@@ -143,11 +143,12 @@ def saveFile():
 
 def encrypFile():
     key_tab3 = passwordEntry_tab3.get()
-    key_tab3 = hashlib.sha256(key_tab3.encode()).digest()
+    
     route = str(route_tab3.get())
     destination = save_route_entry_tab3.get()
     
     if route != '' and destination != '' and checkPassword(key_tab3):
+        key_tab3 = hashlib.sha256(key_tab3.encode()).digest()
         encryptor = Encryptor(key_tab3)
         delete = False
         if delete_selection_tab3.get() == 1:
@@ -164,10 +165,11 @@ def encrypFile():
     
 def decrypFile():
     key_tab4 = passwordEntry_tab4.get()
-    key_tab4 = hashlib.sha256(key_tab4.encode()).digest()
+    
     route = str(route_tab4.get())
     destination = save_route_entry_tab4.get()
     if route != '' and destination != '' and checkPassword(key_tab4):
+        key_tab4 = hashlib.sha256(key_tab4.encode()).digest()
         encryptor = Encryptor(key_tab4)
         delete = False
         if delete_selection_tab4.get() == 1:
@@ -259,7 +261,7 @@ nb.add(tab4 , text='Desifrar Archivo')
 
 ######################Tab1 Content ##########################
 label = ttk.Label(tab1, text="Introduzca Texto a Cifrar")
-label.grid(column = 0, row = 0,sticky='W')
+label.grid(column = 0, row = 0,pady=20)
 
 #text box
 textbox_text = StringVar()
