@@ -214,6 +214,11 @@ def showCharacters(tab):
             passwordEntry_tab3.config(show="")
         elif password_entry_variable_3.get() == 0:
             passwordEntry_tab3.config(show="*")
+    elif tab == 4:
+        if password_entry_variable_4.get() == 1:
+            passwordEntry_tab4.config(show="")
+        elif password_entry_variable_4.get() == 0:
+            passwordEntry_tab4.config(show="*")
     
 fileTypes = [
     ('Text files', '*.txt'),
@@ -393,7 +398,7 @@ select_file_tab4.grid(column = 1, row = 0, sticky='E')
 
 #Password Frame
 password_frame_tab4 = ttk.Frame(tab4)
-password_frame_tab4.grid(column= 0, row =3, sticky='N')
+password_frame_tab4.grid(column= 0, row =6, sticky='N')
 passwordLabel_tab4 = ttk.Label(password_frame_tab4, text="Contraseña")
 passwordLabel_tab4.grid(column = 0, row = 0)
 password_entry_variable_4= IntVar()
@@ -406,7 +411,7 @@ show_password_labe_tab4.grid(column= 3, row =0, sticky='W')
 
 #Save File
 save_file_label_tab4 = ttk.Label(tab4, text="Selecione en donde quiere guardar el archivo")
-save_file_label_tab4.grid(column = 0 , row = 4)
+save_file_label_tab4.grid(column = 0 , row = 4, pady=20)
 
 save_file_frame_tab4 = ttk.Frame(tab4)
 save_file_frame_tab4 .grid(column = 0, row = 5)
@@ -419,7 +424,7 @@ save_route_button_tab4.grid(column = 1, row = 0)
 
 #Delete file
 delete_file_frame_tab4 = ttk.Entry(tab4)
-delete_file_frame_tab4.grid(column = 0, row = 6)
+delete_file_frame_tab4.grid(column = 0, row = 10)
 delete_file_label_tab4 = ttk.Label(delete_file_frame_tab4, text='Desea Borrar el Archivo Original')
 delete_file_label_tab4.grid(column = 0, row= 0)
 delete_selection_tab4 = IntVar()
@@ -428,7 +433,7 @@ delete_file_input_tab4.grid(column = 1, row= 0)
 
 #Submit
 submitButton_tab4 = ttk.Button(tab4, text="Cifrar Archivo", command= decrypFile )
-submitButton_tab4.grid(column = 0, row = 11)
+submitButton_tab4.grid(column = 0, row = 11, pady=20)
 
 error_label_tab4 = ttk.Label(tab4)
 error_label_tab4.grid(column = 0, row = 12)
