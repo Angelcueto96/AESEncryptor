@@ -88,10 +88,7 @@ def textEncryption():
         textBox.insert("1.0", encryptedB64)
         error_label_tab2.config(text = "")
     else:
-        error_label_tab1.config( text = "Verifique  cumplir con lo siguiente: \n Que  todos los campos esten llenos \n Que la contaseña tenga al menos: \n 8 carácteres \n Una letra mayúscula \n Una letra mayúscula \n Un digito \n Un caráter especial ")
-        
-        
-    
+        error_label_tab1.config( text = "Verifique  cumplir con lo siguiente: \n Que  todos los campos esten llenos \n Que la contaseña tenga al menos: \n 8 carácteres \n Una letra mayúscula \n Una letra mayúscula \n Un digito \n Un caráter especial ")  
     
 def textDecryption():
     text_tab2 = textBox_tab2.get("1.0",END)
@@ -123,10 +120,6 @@ def openFile(tab):
         route_tab3.set(file.name)
     elif tab == 4:
         route_tab4.set(file.name)
-    #route_tab3 = str(route_tab3)   
-    #print(file)
-    #print(file.name)
-    #print(os.path.splitext(file.name)[1])
     
 def saveFile(tab):
     file = fdialog.asksaveasfilename(filetypes= fileTypes)
@@ -260,25 +253,17 @@ def deletingFile(tab):
             save_route_entry_tab4.config(state = 'disabled')
             save_route_button_tab4.config(state='disabled')
             
-
-    
-    
-    
 fileTypes = [
     ('All files', '*'),
     ('Text files', '*.txt'),
     ('Encrypted Files', '*.cfr*'),
 ]    
-
-decrypFileTypes = [
-    ('Encrypted Files', '*.cfr*'),
-]   
+ 
 
 #Window Definition
 window = Tk()
 window.title('AES Encriptor')
 window.geometry('700x700')
-#window.configure(background='black')
 
 #######################Style Definition#####################################
 
