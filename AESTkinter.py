@@ -337,63 +337,64 @@ error_label_tab2.grid(column = 0, row = 5, columnspan=10)
 
 #tit
 tittle_label_tab3 = ttk.Label(tab3, text="Seleccione un Archivo a Cifrar", style="Blue.TLabel")
-tittle_label_tab3.grid(column = 0, row = 0, pady=20)
+tittle_label_tab3.grid(column = 0, row = 0,  columnspan=10 )
 
 instruction_label_tab3 = ttk.Label(tab3, text="Ingrese la ruta del archivo o selecione el Archivo", style="Blue.TLabel")
-instruction_label_tab3.grid(column = 0, row = 1)
+instruction_label_tab3.grid(column = 0, row = 1, columnspan=10)
 
 #Open frame 
 file_frame_tab3 = ttk.Frame(tab3 , style="Blue.TFrame")
-file_frame_tab3.grid(column = 0, row = 2)
+file_frame_tab3.grid(column = 0, row = 2, columnspan=10)
 route_tab3 = StringVar()
 route_tab3.set("")
-file_label_tab3 = ttk.Entry(file_frame_tab3, textvariable= route_tab3, width=85 )
+file_label_tab3 = ttk.Entry(file_frame_tab3, textvariable= route_tab3, width=50 )
 file_label_tab3.grid(column = 0, row= 0,sticky='W', padx = 10)
 select_file_tab3 = ttk.Button(file_frame_tab3, text="Selecionar Archivo", command= lambda: openFile(3) , style="Blue.TButton")
 select_file_tab3.grid(column = 1, row = 0, sticky='E')
+
+#save File
+save_file_label_tab3 = ttk.Label(tab3, text="Selecione en donde quiere guardar el archivo", style="Blue.TLabel")
+save_file_label_tab3.grid(column = 0 , row = 3, columnspan=10 )
+
+save_file_frame_tab3 = ttk.Frame(tab3 , style="Blue.TFrame")
+save_file_frame_tab3 .grid(column = 0, row = 4, columnspan=10)
+save_route_tab3 = StringVar()
+save_route_tab3.set("")
+save_route_entry_tab3 = ttk.Entry(save_file_frame_tab3 , textvariable= save_route_tab3,  width=50)
+save_route_entry_tab3.grid(column = 0, row = 0, padx = 10)
+save_route_button_tab3 = ttk.Button(save_file_frame_tab3 , text="Guardar Como",command= lambda: saveFile(3) , style="Blue.TButton")
+save_route_button_tab3.grid(column = 1, row = 0)
+
 #password Frame
 password_frame_tab3 = ttk.Frame(tab3, style="Blue.TFrame")
-password_frame_tab3.grid(column= 0, row =6, sticky='N')
+password_frame_tab3.grid(column= 0, row =5, sticky='N', columnspan=10)
 passwordLabel_tab3 = ttk.Label(password_frame_tab3, text="Contraseña", style="Blue.TLabel")
 passwordLabel_tab3.grid(column = 0, row = 0)
 password_entry_variable_3= IntVar()
 passwordEntry_tab3 = Entry(password_frame_tab3, show="*" )
-passwordEntry_tab3.grid(column = 1, row = 0, pady=20, sticky='N')
+passwordEntry_tab3.grid(column = 1, row = 0, pady=20, sticky='N', padx = 10)
 show_password_tab3 = ttk.Checkbutton(password_frame_tab3, command = lambda:showCharacters(3) , variable= password_entry_variable_3, style="Blue.TCheckbutton")
 show_password_tab3.grid(column = 2, row = 0, sticky='E')
 show_password_labe_tab3 = ttk.Label(password_frame_tab3, text = "Mostrar", style="Blue.TLabel")
 show_password_labe_tab3.grid(column= 3, row =0, sticky='W')
 
-#save File
-save_file_label_tab3 = ttk.Label(tab3, text="Selecione en donde quiere guardar el archivo", style="Blue.TLabel")
-save_file_label_tab3.grid(column = 0 , row = 3, pady=20  )
 
-save_file_frame_tab3 = ttk.Frame(tab3 , style="Blue.TFrame")
-save_file_frame_tab3 .grid(column = 0, row = 4)
-save_route_tab3 = StringVar()
-save_route_tab3.set("")
-save_route_entry_tab3 = ttk.Entry(save_file_frame_tab3 , textvariable= save_route_tab3,  width=50)
-save_route_entry_tab3.grid(column = 0, row = 0)
-save_route_button_tab3 = ttk.Button(save_file_frame_tab3 , text="Guardar Como",command= lambda: saveFile(3) , style="Blue.TButton")
-save_route_button_tab3.grid(column = 1, row = 0)
 
 #Delete File Frame
 delete_file_frame_tab3 = ttk.Entry(tab3, style="Blue.TFrame")
-delete_file_frame_tab3.grid(column = 0, row = 10)
-
+delete_file_frame_tab3.grid(column = 0, row = 6, columnspan=10)
 delete_file_label_tab3 = ttk.Label(delete_file_frame_tab3, text='Desea Borrar el Archivo Original' , style="Blue.TLabel")
 delete_file_label_tab3.grid(column = 0, row= 0)
-
 delete_selection_tab3 = IntVar()
 delete_file_input_tab3 = ttk.Checkbutton(delete_file_frame_tab3, variable = delete_selection_tab3 , style="Blue.TCheckbutton")
 delete_file_input_tab3.grid(column = 1, row= 0)
 #delete_file_input_tab3.state(['disabled'])
 
 submitButton_tab3 = ttk.Button(tab3, text="Cifrar Archivo", command= encrypFile , style="Blue.TButton")
-submitButton_tab3.grid(column = 0, row = 11, pady=20)
+submitButton_tab3.grid(column = 0, row = 7, columnspan=10)
 
 error_label_tab3 = ttk.Label(tab3 , style="Blue.TLabel")
-error_label_tab3.grid(column = 0, row = 12, sticky="N")
+error_label_tab3.grid(column = 0, row = 8, sticky="N", columnspan=10)
 
 #############################Tab 4 Content###########################
 
