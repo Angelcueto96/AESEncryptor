@@ -225,13 +225,18 @@ window.title('AES Encriptor')
 window.geometry('650x600')
 window.configure(background='black')
 
-#Style Definition
-#backGroundStyle = ttk.Style()
-#backGroundStyle.configure("TabStyle", background="black")
-style = ttk.Style()
-style.configure("Dark", foreground="white", background="black")   
+#######################Style Definition#####################################
 
-#Grid definition
+frameStyle = ttk.Style()
+frameStyle.configure("Blue.TFrame", foreground="white", background="#113759")   
+
+labelStyle = ttk.Style()
+labelStyle.configure("Blue.TLabel", foreground="white", background="#113759", padx ='2')
+
+buttonStyle = ttk.Style()
+buttonStyle.configure("Blue.TButton", foreground="#113759", background="white", relief='flat' , padx= '2')
+
+########################Grid definition
 counter = 0
 rowsNumber = 15
 columnsNumber = 15 
@@ -243,7 +248,7 @@ while counter < rowsNumber:
 #notebook
 nb = ttk.Notebook(window)
 nb.grid(row=0, column=0, columnspan = columnsNumber, rowspan=rowsNumber - 1, sticky='SWNE')
-tab1 = ttk.Frame(nb)
+tab1 = ttk.Frame(nb, style = "Blue.TFrame")
 nb.add(tab1 , text='Cifrar Texto')
 tab2 = ttk.Frame(nb)
 nb.add(tab2 , text='Desifrar Texto')
@@ -253,8 +258,8 @@ tab4 = ttk.Frame(nb)
 nb.add(tab4 , text='Desifrar Archivo')
 
 ######################Tab1 Content ##########################
-label = ttk.Label(tab1, text="Introduzca Texto a Cifrar")
-label.grid(column = 0, row = 0,sticky='W')
+label = ttk.Label(tab1, text="Introduzca Texto a Cifrar", style="Blue.TLabel")
+label.grid(column = 0, row = 0, pady='20')
 
 #text box
 textbox_text = StringVar()
@@ -263,24 +268,24 @@ textBox = Textbox.ScrolledText(tab1  )
 textBox.grid(column = 0, row = 3 ,sticky='N' )
 
 #password Frame
-password_frame_tab1 = ttk.Frame(tab1)
+password_frame_tab1 = ttk.Frame(tab1, style ="Blue.TFrame")
 password_frame_tab1.grid(column= 0, row =6, sticky='N')
-passwordLabel = ttk.Label(password_frame_tab1, text="Contraseña")
+passwordLabel = ttk.Label(password_frame_tab1, text="Contraseña", style="Blue.TLabel")
 passwordLabel.grid(column = 0, row = 0)
 password_entry_variable= IntVar()
 passwordEntry = Entry(password_frame_tab1, show="*" )
 passwordEntry.grid(column = 1, row = 0, pady=20, sticky='N')
 show_password_tab1 = ttk.Checkbutton(password_frame_tab1, command = lambda:showCharacters(1) , variable= password_entry_variable)
 show_password_tab1.grid(column = 2, row = 0, sticky='E')
-show_password_labe_tab1 = ttk.Label(password_frame_tab1, text = "Mostrar")
+show_password_labe_tab1 = ttk.Label(password_frame_tab1, text = "Mostrar",style ="Blue.TLabel")
 show_password_labe_tab1.grid(column= 3, row =0, sticky='W')
 
 #submit button
-submitButtonTab1 = ttk.Button(tab1, text="Cifrar",command=textEncryption)
+submitButtonTab1 = ttk.Button(tab1, text="Cifrar",command=textEncryption, style="Blue.TButton")
 submitButtonTab1.grid(column = 0, row = 8)
 
 
-error_label_tab1 = ttk.Label(tab1)
+error_label_tab1 = ttk.Label(tab1 , style="Blue.TLabel")
 error_label_tab1.grid(column = 0, row = 9)
 
 
@@ -428,7 +433,7 @@ delete_file_input_tab4.grid(column = 1, row= 0)
 
 #Submit
 submitButton_tab4 = ttk.Button(tab4, text="Cifrar Archivo", command= decrypFile )
-submitButton_tab4.grid(column = 0, row = 11)
+submitButton_tab4.grid(column = 0, row = 11, pady=20)
 
 error_label_tab4 = ttk.Label(tab4)
 error_label_tab4.grid(column = 0, row = 12)
