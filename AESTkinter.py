@@ -64,7 +64,10 @@ class Encryptor:
         dec = self.decrypt(ciphertext, self.key)
         #Remove extetion 
         if delete:
+            print(file_destination, "Antes")
             file_destination = os.path.splitext(file_destination)[0]
+            file_destination = os.path.splitext(file_destination)[0]
+            print(file_destination, "Despues")
             os.remove(file_name)
         with open(file_destination + str(extention) , 'wb') as fo:
             fo.write(dec)
