@@ -227,8 +227,8 @@ decrypFileTypes = [
 #Window Definition
 window = Tk()
 window.title('AES Encriptor')
-window.geometry('650x600')
-window.configure(background='black')
+window.geometry('650x750')
+#window.configure(background='black')
 
 #######################Style Definition#####################################
 
@@ -246,8 +246,8 @@ checkButtonStyle.configure("Blue.TCheckbutton", foreground="white", background="
 
 ########################Grid definition
 counter = 0
-rowsNumber = 15
-columnsNumber = 15 
+rowsNumber = 12
+columnsNumber = 12 
 while counter < rowsNumber:
     window.rowconfigure(counter, weight=1)
     window.columnconfigure(counter, weight = 1)
@@ -265,18 +265,28 @@ nb.add(tab3 , text='Cifrar Archivo')
 tab4 = ttk.Frame(nb,  style = "Blue.TFrame")
 nb.add(tab4 , text='Desifrar Archivo')
 
+#Adding grid to tabs 
+tabsArray =[tab1, tab2, tab3, tab4]
+counterTabs = 0
+tabGrid = 10
+while counterTabs < tabGrid:
+    for tab in tabsArray:
+        tab.rowconfigure(counterTabs, weight=1)
+        tab.columnconfigure(counterTabs, weight = 1)
+    counterTabs += 1
+
 ######################Tab1 Content ##########################
 label = ttk.Label(tab1, text="Introduzca Texto a Cifrar", style="Blue.TLabel")
-label.grid(column = 0, row = 0, pady='20')
+label.grid(column = 0, row = 0, pady='20',  columnspan=10)
 
 
 #text box
 textBox = Textbox.ScrolledText(tab1  )
-textBox.grid(column = 0, row = 3 ,sticky='N' )
+textBox.grid(column = 0, row = 1 ,sticky='N' , columnspan=10)
 
 #password Frame
 password_frame_tab1 = ttk.Frame(tab1, style ="Blue.TFrame")
-password_frame_tab1.grid(column= 0, row =6, sticky='N')
+password_frame_tab1.grid(column= 0, row =3, sticky='N',  columnspan=10)
 passwordLabel = ttk.Label(password_frame_tab1, text="Contraseña", style="Blue.TLabel")
 passwordLabel.grid(column = 0, row = 0)
 password_entry_variable= IntVar()
@@ -289,24 +299,24 @@ show_password_labe_tab1.grid(column= 3, row =0, sticky='W')
 
 #submit button
 submitButtonTab1 = ttk.Button(tab1, text="Cifrar",command=textEncryption, style="Blue.TButton")
-submitButtonTab1.grid(column = 0, row = 8)
+submitButtonTab1.grid(column = 0, row = 4,  columnspan=10)
 
 
 error_label_tab1 = ttk.Label(tab1 , style="Blue.TLabel")
-error_label_tab1.grid(column = 0, row = 9)
+error_label_tab1.grid(column = 0, row = 5, columnspan=10)
 
 
 ###########################Tab 2 Content ########################
 label_tab2 = ttk.Label(tab2, text="Introduzca Texto Desifrar", style="Blue.TLabel")
-label_tab2.grid(column = 0, row = 0 , pady=20)
+label_tab2.grid(column = 0, row = 0 , pady=20, columnspan=10)
 #text box
 textbox_text_tab2 = StringVar()
 textbox_text_tab2.set("")
 textBox_tab2 = Textbox.ScrolledText(tab2)
-textBox_tab2.grid(column = 0, row = 3 )
+textBox_tab2.grid(column = 0, row = 1, columnspan=10 )
 #password Frame
 password_frame_tab2 = ttk.Frame(tab2, style="Blue.TFrame")
-password_frame_tab2.grid(column= 0, row =4, sticky='N')
+password_frame_tab2.grid(column= 0, row =3, sticky='N', columnspan=10)
 passwordLabel_tab2 = ttk.Label(password_frame_tab2, text="Contraseña", style="Blue.TLabel")
 passwordLabel_tab2.grid(column = 0, row = 0)
 password_entry_variable_2= IntVar()
@@ -318,10 +328,10 @@ show_password_labe_tab2 = ttk.Label(password_frame_tab2, text = "Mostrar" , styl
 show_password_labe_tab2.grid(column= 3, row =0, sticky='W')
 #submit button
 submitButtonTab1 = ttk.Button(tab2, text="Cifrar", command=textDecryption, style="Blue.TButton")
-submitButtonTab1.grid(column = 0, row = 11)
+submitButtonTab1.grid(column = 0, row = 4, columnspan=10)
 
 error_label_tab2 = ttk.Label(tab2 ,style="Blue.TLabel")
-error_label_tab2.grid(column = 0, row = 12)
+error_label_tab2.grid(column = 0, row = 5, columnspan=10)
 
 #############################Tab 3 Content###########################
 
@@ -334,11 +344,11 @@ instruction_label_tab3.grid(column = 0, row = 1)
 
 #Open frame 
 file_frame_tab3 = ttk.Frame(tab3 , style="Blue.TFrame")
-file_frame_tab3.grid(column = 0, row = 2, columnspan=12)
+file_frame_tab3.grid(column = 0, row = 2)
 route_tab3 = StringVar()
 route_tab3.set("")
-file_label_tab3 = ttk.Entry(file_frame_tab3, textvariable= route_tab3, width=50 )
-file_label_tab3.grid(column = 0, row= 0,sticky='W')
+file_label_tab3 = ttk.Entry(file_frame_tab3, textvariable= route_tab3, width=85 )
+file_label_tab3.grid(column = 0, row= 0,sticky='W', padx = 10)
 select_file_tab3 = ttk.Button(file_frame_tab3, text="Selecionar Archivo", command= lambda: openFile(3) , style="Blue.TButton")
 select_file_tab3.grid(column = 1, row = 0, sticky='E')
 #password Frame
@@ -356,7 +366,7 @@ show_password_labe_tab3.grid(column= 3, row =0, sticky='W')
 
 #save File
 save_file_label_tab3 = ttk.Label(tab3, text="Selecione en donde quiere guardar el archivo", style="Blue.TLabel")
-save_file_label_tab3.grid(column = 0 , row = 3, pady=20 )
+save_file_label_tab3.grid(column = 0 , row = 3, pady=20  )
 
 save_file_frame_tab3 = ttk.Frame(tab3 , style="Blue.TFrame")
 save_file_frame_tab3 .grid(column = 0, row = 4)
@@ -383,7 +393,7 @@ submitButton_tab3 = ttk.Button(tab3, text="Cifrar Archivo", command= encrypFile 
 submitButton_tab3.grid(column = 0, row = 11, pady=20)
 
 error_label_tab3 = ttk.Label(tab3 , style="Blue.TLabel")
-error_label_tab3.grid(column = 0, row = 12)
+error_label_tab3.grid(column = 0, row = 12, sticky="N")
 
 #############################Tab 4 Content###########################
 
