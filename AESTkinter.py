@@ -34,10 +34,15 @@ class Encryptor:
         return iv + cipher.encrypt(message)
 
     def encrypt_file(self, file_name, file_destination, delete):
+        extention = os.path.splitext(file_name)[1]
+        print(extention)
+        print("Extention " , extention)
+        
         with open(file_name, 'rb') as fo:
             plaintext = fo.read()
         enc = self.encrypt(plaintext, self.key)
-        with open(file_destination + ".enc", 'wb') as fo:
+        print(file_destination)
+        with open(file_destination + ".cfr" + str(extention), 'wb') as fo:
             fo.write(enc)
         if delete:
             os.remove(file_name)
@@ -54,31 +59,11 @@ class Encryptor:
         with open(file_name, 'rb') as fo:
             ciphertext = fo.read()
         dec = self.decrypt(ciphertext, self.key)
-        with open(filee_destination[:-4], 'wb') as fo:
+        with open(file_destination[:-4], 'wb') as fo:
             fo.write(dec)
-        if remove:
+        if delete:
              os.remove(file_name)
             
-       
-
-    def getAllFiles(self):
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        dirs = []
-        for dirName, subdirList, fileList in os.walk(dir_path):
-            for fname in fileList:
-                if (fname != 'script.py' and fname != 'data.txt.enc'):
-                    dirs.append(dirName + "\\" + fname)
-        return dirs
-
-    def encrypt_all_files(self):
-        dirs = self.getAllFiles()
-        for file_name in dirs:
-            self.encrypt_file(file_name)
-
-    def decrypt_all_files(self):
-        dirs = self.getAllFiles()
-        for file_name in dirs:
-            self.decrypt_file(file_name)
     
 
 
@@ -132,12 +117,17 @@ def openFile(tab):
     elif tab == 4:
         route_tab4.set(file.name)
     #route_tab3 = str(route_tab3)   
-    print(file.name)
+    #print(file)
+    #print(file.name)
+    #print(os.path.splitext(file.name)[1])
     
-def saveFile():
+def saveFile(tab):
     file = fdialog.asksaveasfilename(filetypes= fileTypes)
     print(file)
-    save_route_tab3.set(file)
+    if tab == 3:
+        save_route_tab3.set(file)
+    elif tab == 4:
+        save_route_tab4.set(file)
     #route_tab4.set(file.name)
     
 
@@ -224,7 +214,12 @@ def showCharacters(tab):
     
 fileTypes = [
     ('Text files', '*.txt'),
+    ('Encrypted Files', '*.cfr*'),
 ]    
+
+decrypFileTypes = [
+    ('Encrypted Files', '*.cfr*'),
+]   
 
 #Window Definition
 window = Tk()
@@ -366,7 +361,7 @@ save_route_tab3 = StringVar()
 save_route_tab3.set("")
 save_route_entry_tab3 = ttk.Entry(save_file_frame_tab3 , textvariable= save_route_tab3,  width=50)
 save_route_entry_tab3.grid(column = 0, row = 0)
-save_route_button_tab3 = ttk.Button(save_file_frame_tab3 , text="Guardar Como",command= saveFile , style="Blue.TButton")
+save_route_button_tab3 = ttk.Button(save_file_frame_tab3 , text="Guardar Como",command= lambda: saveFile(3) , style="Blue.TButton")
 save_route_button_tab3.grid(column = 1, row = 0)
 
 #Delete File Frame
@@ -428,7 +423,7 @@ save_route_tab4 = StringVar()
 save_route_tab4.set("")
 save_route_entry_tab4 = ttk.Entry(save_file_frame_tab4 , textvariable= save_route_tab4,  width=50)
 save_route_entry_tab4.grid(column = 0, row = 0)
-save_route_button_tab4 = ttk.Button(save_file_frame_tab4 , text="Guardar Como",command= saveFile, style="Blue.TButton" )
+save_route_button_tab4 = ttk.Button(save_file_frame_tab4 , text="Guardar Como",command= lambda: saveFile(4) , style="Blue.TButton" )
 save_route_button_tab4.grid(column = 1, row = 0)
 
 #Delete file
