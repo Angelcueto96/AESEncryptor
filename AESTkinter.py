@@ -56,10 +56,13 @@ class Encryptor:
         return plaintext.rstrip(b"\0")
 
     def decrypt_file(self, file_name, file_destination, delete):
+        #print(file_destination[:-4])
+        extention = os.path.splitext(file_name)[1]
         with open(file_name, 'rb') as fo:
             ciphertext = fo.read()
         dec = self.decrypt(ciphertext, self.key)
-        with open(file_destination[:-4], 'wb') as fo:
+        
+        with open(file_destination + str(extention) , 'wb') as fo:
             fo.write(dec)
         if delete:
              os.remove(file_name)
