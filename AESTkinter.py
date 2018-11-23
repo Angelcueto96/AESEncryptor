@@ -143,11 +143,12 @@ def saveFile():
 
 def encrypFile():
     key_tab3 = passwordEntry_tab3.get()
-    key_tab3 = hashlib.sha256(key_tab3.encode()).digest()
+    
     route = str(route_tab3.get())
     destination = save_route_entry_tab3.get()
     
     if route != '' and destination != '' and checkPassword(key_tab3):
+        key_tab3 = hashlib.sha256(key_tab3.encode()).digest()
         encryptor = Encryptor(key_tab3)
         delete = False
         if delete_selection_tab3.get() == 1:
@@ -164,10 +165,11 @@ def encrypFile():
     
 def decrypFile():
     key_tab4 = passwordEntry_tab4.get()
-    key_tab4 = hashlib.sha256(key_tab4.encode()).digest()
+    
     route = str(route_tab4.get())
     destination = save_route_entry_tab4.get()
     if route != '' and destination != '' and checkPassword(key_tab4):
+        key_tab4 = hashlib.sha256(key_tab4.encode()).digest()
         encryptor = Encryptor(key_tab4)
         delete = False
         if delete_selection_tab4.get() == 1:
@@ -214,6 +216,11 @@ def showCharacters(tab):
             passwordEntry_tab3.config(show="")
         elif password_entry_variable_3.get() == 0:
             passwordEntry_tab3.config(show="*")
+    elif tab == 4:
+        if password_entry_variable_4.get() == 1:
+            passwordEntry_tab4.config(show="")
+        elif password_entry_variable_4.get() == 0:
+            passwordEntry_tab4.config(show="*")
     
 fileTypes = [
     ('Text files', '*.txt'),
@@ -260,6 +267,7 @@ nb.add(tab4 , text='Desifrar Archivo')
 ######################Tab1 Content ##########################
 label = ttk.Label(tab1, text="Introduzca Texto a Cifrar", style="Blue.TLabel")
 label.grid(column = 0, row = 0, pady='20')
+
 
 #text box
 textbox_text = StringVar()
@@ -398,7 +406,7 @@ select_file_tab4.grid(column = 1, row = 0, sticky='E')
 
 #Password Frame
 password_frame_tab4 = ttk.Frame(tab4)
-password_frame_tab4.grid(column= 0, row =3, sticky='N')
+password_frame_tab4.grid(column= 0, row =6, sticky='N')
 passwordLabel_tab4 = ttk.Label(password_frame_tab4, text="Contraseña")
 passwordLabel_tab4.grid(column = 0, row = 0)
 password_entry_variable_4= IntVar()
@@ -411,7 +419,7 @@ show_password_labe_tab4.grid(column= 3, row =0, sticky='W')
 
 #Save File
 save_file_label_tab4 = ttk.Label(tab4, text="Selecione en donde quiere guardar el archivo")
-save_file_label_tab4.grid(column = 0 , row = 4)
+save_file_label_tab4.grid(column = 0 , row = 4, pady=20)
 
 save_file_frame_tab4 = ttk.Frame(tab4)
 save_file_frame_tab4 .grid(column = 0, row = 5)
@@ -424,7 +432,7 @@ save_route_button_tab4.grid(column = 1, row = 0)
 
 #Delete file
 delete_file_frame_tab4 = ttk.Entry(tab4)
-delete_file_frame_tab4.grid(column = 0, row = 6)
+delete_file_frame_tab4.grid(column = 0, row = 10)
 delete_file_label_tab4 = ttk.Label(delete_file_frame_tab4, text='Desea Borrar el Archivo Original')
 delete_file_label_tab4.grid(column = 0, row= 0)
 delete_selection_tab4 = IntVar()
