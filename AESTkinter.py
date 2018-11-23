@@ -26,33 +26,34 @@ class Encryptor:
     def pad(self, s):
         return s + b"\0" * (AES.block_size - len(s) % AES.block_size)
 
-    def encrypt(self, message, key, key_size=256):
-        #message = message.encode()
-        message = self.pad(message)
+    def encrypt(self, item, key, key_size=256):
+        item = self.pad(item)
         iv = Random.new().read(AES.block_size)
         cipher = AES.new(key, AES.MODE_CBC, iv)
-        return iv + cipher.encrypt(message)
+        return iv + cipher.encrypt(item)
 
     def encrypt_file(self, file_name, file_destination, delete):
+        print(delete)
         extention = os.path.splitext(file_name)[1]
-        print(extention)
-        print("Extention " , extention)
         
         with open(file_name, 'rb') as fo:
             plaintext = fo.read()
         enc = self.encrypt(plaintext, self.key)
-        print(file_destination)
+        #Remove extetion 
+        if delete:
+            file_destination = os.path.splitext(file_destination)[0]
+            os.remove(file_name)
+            
         with open(file_destination + ".cfr" + str(extention), 'wb') as fo:
             fo.write(enc)
-        if delete:
-            os.remove(file_name)
+        
             
         
 
-    def decrypt(self, ciphertext, key):
-        iv = ciphertext[:AES.block_size]
+    def decrypt(self, ciphedItem, key):
+        iv = ciphedItem[:AES.block_size]
         cipher = AES.new(key, AES.MODE_CBC, iv)
-        plaintext = cipher.decrypt(ciphertext[AES.block_size:])
+        plaintext = cipher.decrypt(ciphedItem[AES.block_size:])
         return plaintext.rstrip(b"\0")
 
     def decrypt_file(self, file_name, file_destination, delete):
@@ -61,11 +62,14 @@ class Encryptor:
         with open(file_name, 'rb') as fo:
             ciphertext = fo.read()
         dec = self.decrypt(ciphertext, self.key)
-        
+        #Remove extetion 
+        if delete:
+            file_destination = os.path.splitext(file_destination)[0]
+            os.remove(file_name)
         with open(file_destination + str(extention) , 'wb') as fo:
             fo.write(dec)
-        if delete:
-             os.remove(file_name)
+       
+             
             
     
 
@@ -84,7 +88,7 @@ def textEncryption():
         textBox.insert("1.0", encryptedB64)
         error_label_tab2.config(text = "")
     else:
-        error_label_tab1.config( text = "Verifique  cumplir con lo siguiente: \n Que los campos sean correctos \n Que la contraseña tenga al menos 8 caracteres una letra mayuscla y al menos un digito")
+        error_label_tab1.config( text = "Verifique  cumplir con lo siguiente: \n Que  todos los campos esten llenos \n Que la contaseña tenga al menos: \n 8 carácteres \n Una letra mayúscula \n Una letra mayúscula \n Un digito \n Un caráter especial ")
         
         
     
@@ -96,7 +100,7 @@ def textDecryption():
         try:
             text_tab2 = base64.b64decode(text_tab2, altchars = None)
         except ValueError:
-            error_label_tab2.config(text = "Mensaje no Valido")
+            error_label_tab2.config(text = "El Hash insertado no es válido")
             
         key_tab2 = hashlib.sha256(key_tab2.encode()).digest()
         encryptor = Encryptor(key_tab2)
@@ -108,9 +112,9 @@ def textDecryption():
             textBox_tab2.insert("1.0", decrypted)
             error_label_tab2.config(text = "")
         except ValueError:
-            error_label_tab2.config(text = "Mensaje no Valido")
+            error_label_tab2.config(text = "El Hash insertado no es válido")
     else:
-        error_label_tab2.config( text = "Verifique  cumplir con lo siguiente: \n Que los campos sean correctos \n Que la contraseña tenga al menos 8 caracteres una letra mayuscla y al menos un digito")
+        error_label_tab2.config( text = "Verifique  cumplir con lo siguiente: \n Que  todos los campos esten llenos \n Que la contaseña tenga al menos: \n 8 carácteres \n Una letra mayúscula \n Una letra mayúscula \n Un digito \n Un caráter especial ")
         
     
 def openFile(tab):
@@ -135,61 +139,81 @@ def saveFile(tab):
     
 
 def encrypFile():
+    error_label_tab3.config(text ='')
     key_tab3 = passwordEntry_tab3.get()
     
     route = str(route_tab3.get())
-    destination = save_route_entry_tab3.get()
-    
+    destination = ''
+    delete= False
+    if delete_selection_tab3.get() == 1:
+            delete = True
+            destination = route    
+    else:
+        destination = save_route_entry_tab3.get()
+
     if route != '' and destination != '' and checkPassword(key_tab3):
         key_tab3 = hashlib.sha256(key_tab3.encode()).digest()
-        encryptor = Encryptor(key_tab3)
-        delete = False
-        if delete_selection_tab3.get() == 1:
-            delete = True
+        encryptor = Encryptor(key_tab3)     
         try:
             encryptor.encrypt_file( route, destination, delete )
+            error_label_tab3.config(text = "Archivo Cifrado Correctamente")
         except ValueError:
             error_label_tab3.config(text = "Verifique que las rutas sean correctas")
     else:
-        error_label_tab3.config(text = "Verifique lo siguiente:")
+        error_label_tab3.config( text = "Verifique  cumplir con lo siguiente: \n Que  todos los campos esten llenos adecuadamente \n Que la contaseña tenga al menos: \n 8 carácteres \n Una letra mayúscula \n Una letra mayúscula \n Un digito \n Un caráter especial ")
             
                 
     
     
 def decrypFile():
+    error_label_tab4.config(text ='')
     key_tab4 = passwordEntry_tab4.get()
-    
     route = str(route_tab4.get())
-    destination = save_route_entry_tab4.get()
+    delete = False
+    destination = ''
+    if delete_selection_tab4.get() == 1:
+        delete = True
+        destination = route
+    else:
+        destination = save_route_entry_tab4.get()
+        
     if route != '' and destination != '' and checkPassword(key_tab4):
         key_tab4 = hashlib.sha256(key_tab4.encode()).digest()
         encryptor = Encryptor(key_tab4)
-        delete = False
-        if delete_selection_tab4.get() == 1:
-            delete = True
+        
         try:
             encryptor.decrypt_file(route,  destination, delete )
+            error_label_tab4.config(text = "Archivo Desifrado Correctamente ")
         except ValueError:
             error_label_tab4.config(text = "Verifique que las rutas sean correctas")
     else:
-        error_label_tab4.config(text = "Verifique lo siguiente:")
+        error_label_tab4.config( text = "Verifique  cumplir con lo siguiente: \n Que  todos los campos esten llenos adecuadamente \n Que la contaseña tenga al menos: \n 8 carácteres \n Una letra mayúscula \n Una letra mayúscula \n Un digito \n Un caráter especial ")
         
             
 
 digits = '123456789'
-capital = 'QWERTYUIOPASDFGHJKLÑZXCVBNM'
+uper = 'QWERTYUIOPASDFGHJKLÑZXCVBNM'
+lower = 'qwertyuiopasdfghjklñzxcvbnm'
+special = '!@#~/()=`+^_-*+-¿?¬&%'
 
 def checkPassword(password):
     valid = False
     if len(password) >= 8:
         containsDigit = False
-        containsCapital = False
+        containsUper = False
+        containsLower = False
+        containsSpecial = False
         for letter in list(password):
             if letter in digits:
                 containsDigit = True
-            if letter in capital:
+            if letter in uper:
                 containsCapital = True
-        if containsDigit and containsCapital:
+            if letter in lower:
+                containsLower = True
+            if letter in special:
+                containsSpecial = True
+                
+        if containsDigit and containsCapital and containsLower and containsSpecial:
             valid = True
     return valid
 
@@ -215,7 +239,33 @@ def showCharacters(tab):
         elif password_entry_variable_4.get() == 0:
             passwordEntry_tab4.config(show="*")
     
+def deletingFile(tab):
+    if tab == 3:
+        status = delete_selection_tab3.get()
+        print(status)
+        if status == 0:
+            save_route_entry_tab3.config(state ='normal')
+            save_route_button_tab3.config(state ='normal')
+        elif status ==1:
+            save_route_entry_tab3.config(state='disabled')
+            save_route_button_tab3.config(state='disabled')
+            
+    elif tab == 4:
+        status = delete_selection_tab4.get()
+        print(status)
+        if status == 0:
+            save_route_entry_tab4.config(state = 'normal')
+            save_route_button_tab4.config(state ='normal')
+        elif status == 1:
+            save_route_entry_tab4.config(state = 'disabled')
+            save_route_button_tab4.config(state='disabled')
+            
+
+    
+    
+    
 fileTypes = [
+    ('All files', '*'),
     ('Text files', '*.txt'),
     ('Encrypted Files', '*.cfr*'),
 ]    
@@ -360,7 +410,7 @@ delete_file_frame_tab3.grid(column = 0, row = 2, columnspan=10)
 delete_file_label_tab3 = ttk.Label(delete_file_frame_tab3, text='Desea Borrar el Archivo Original' , style="Blue.TLabel")
 delete_file_label_tab3.grid(column = 0, row= 0)
 delete_selection_tab3 = IntVar()
-delete_file_input_tab3 = ttk.Checkbutton(delete_file_frame_tab3, variable = delete_selection_tab3 , style="Blue.TCheckbutton")
+delete_file_input_tab3 = ttk.Checkbutton(delete_file_frame_tab3, variable = delete_selection_tab3 , style="Blue.TCheckbutton", command= lambda: deletingFile(3))
 delete_file_input_tab3.grid(column = 1, row= 0)
 #delete_file_input_tab3.state(['disabled'])
 
@@ -377,13 +427,15 @@ save_route_entry_tab3.grid(column = 0, row = 1, padx = 10)
 save_route_button_tab3 = ttk.Button(save_file_frame_tab3 , text="Guardar Como",command= lambda: saveFile(3) , style="Blue.TButton")
 save_route_button_tab3.grid(column = 1, row = 1)
 
+
+
 #password Frame
 password_frame_tab3 = ttk.Frame(tab3, style="Blue.TFrame")
 password_frame_tab3.grid(column= 0, row =3, sticky='N', columnspan=10)
 passwordLabel_tab3 = ttk.Label(password_frame_tab3, text="Contraseña", style="Blue.TLabel")
 passwordLabel_tab3.grid(column = 0, row = 0)
 password_entry_variable_3= IntVar()
-passwordEntry_tab3 = Entry(password_frame_tab3, show="*" )
+passwordEntry_tab3 = Entry(password_frame_tab3, show="*" , width = 30)
 passwordEntry_tab3.grid(column = 1, row = 0, sticky='N', padx = 10)
 show_password_tab3 = ttk.Checkbutton(password_frame_tab3, command = lambda:showCharacters(3) , variable= password_entry_variable_3, style="Blue.TCheckbutton")
 show_password_tab3.grid(column = 2, row = 0, sticky='E')
@@ -421,7 +473,7 @@ delete_file_frame_tab4.grid(column = 0, row = 2, columnspan=10)
 delete_file_label_tab4 = ttk.Label(delete_file_frame_tab4, text='Desea Borrar el Archivo Original', style="Blue.TLabel")
 delete_file_label_tab4.grid(column = 0, row= 0)
 delete_selection_tab4 = IntVar()
-delete_file_input_tab4 = ttk.Checkbutton(delete_file_frame_tab4, variable = delete_selection_tab4 , style="Blue.TCheckbutton")
+delete_file_input_tab4 = ttk.Checkbutton(delete_file_frame_tab4, variable = delete_selection_tab4 , style="Blue.TCheckbutton", command= lambda: deletingFile(4))
 delete_file_input_tab4.grid(column = 1, row= 0)
 
 #Save File Frame
@@ -437,13 +489,14 @@ save_route_button_tab4 = ttk.Button(save_file_frame_tab4 , text="Guardar Como",c
 save_route_button_tab4.grid(column = 1, row = 1)
 
 
+
 #Password Frame
 password_frame_tab4 = ttk.Frame(tab4, style="Blue.TFrame")
 password_frame_tab4.grid(column= 0, row =3, sticky='N', columnspan=10)
 passwordLabel_tab4 = ttk.Label(password_frame_tab4, text="Contraseña" , style="Blue.TLabel")
 passwordLabel_tab4.grid(column = 0, row = 0)
 password_entry_variable_4= IntVar()
-passwordEntry_tab4 = Entry(password_frame_tab4, show="*", width = 40 )
+passwordEntry_tab4 = Entry(password_frame_tab4, show="*", width = 30 )
 passwordEntry_tab4.grid(column = 1, row = 0, sticky='N',  padx = 10)
 show_password_tab4 = ttk.Checkbutton(password_frame_tab4, command = lambda:showCharacters(4) , variable= password_entry_variable_4, style="Blue.TCheckbutton")
 show_password_tab4.grid(column = 2, row = 0, sticky='E')
